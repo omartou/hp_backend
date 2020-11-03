@@ -26,11 +26,11 @@ public class HogwartsController {
     @GetMapping("/houses/{houseName}")
     public String getCharactersByHouseName(@PathVariable("houseName") String houseName) throws FileNotFoundException {
         JsonArray characters = jsonHandler.readCharactersFromFile();
+        List<String> idOfHouseMembers = jsonHandler.getMembersIdByHogwartsHouse(houseName);
 
         List<JsonObject> houseCharacters = characters.getValuesAs(JsonObject.class)
                 .stream()
-                .filter(obj -> obj.containsKey("house"))
-                .filter(obj -> obj.get("house").toString().toUpperCase().equals(houseName.toUpperCase()))
+                .filter(obj -> idOfHouseMembers.contains(obj.get("_id").toString()))
                 .collect(Collectors.toList());
 
         return houseCharacters.toString();
