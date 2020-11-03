@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JsonHandler {
@@ -24,14 +25,21 @@ public class JsonHandler {
     public List<String> getMembersIdByHogwartsHouse(String houseName) throws FileNotFoundException {
         JsonArray houseMembers = readHousesFromFile();
 
-        JsonArray members = (houseMembers.getValuesAs(JsonObject.class)
+        Optional<JsonObject> membersObject = (houseMembers.getValuesAs(JsonObject.class)
                 .stream()
                 .filter(obj -> obj.get("name").toString().toUpperCase().equals((houseName.toUpperCase())))
-                .findFirst().get().getJsonArray("members"));
+                .findFirst());
+
+        JsonArray members = null;
+        if (membersObject.isPresent()) {
+            members = membersObject.get().getJsonArray("members");
+        }
 
         List<String> idOfHouseMembers = new ArrayList<>();
-        for (JsonValue member : members) {
-            idOfHouseMembers.add(member.toString());
+        if (members != null) {
+            for (JsonValue member : members) {
+                idOfHouseMembers.add(member.toString());
+            }
         }
 
         return idOfHouseMembers;
