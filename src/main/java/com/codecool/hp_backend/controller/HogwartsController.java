@@ -2,10 +2,7 @@ package com.codecool.hp_backend.controller;
 
 import com.codecool.hp_backend.service.JsonHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.json.*;
 import java.io.FileNotFoundException;
@@ -13,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/hogwarts")
 public class HogwartsController {
 
