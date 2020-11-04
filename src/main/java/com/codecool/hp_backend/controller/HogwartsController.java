@@ -1,5 +1,7 @@
 package com.codecool.hp_backend.controller;
 
+import com.codecool.hp_backend.model.generated.PotterCharacter;
+import com.codecool.hp_backend.service.DataHandler;
 import com.codecool.hp_backend.service.JsonHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,22 +18,17 @@ public class HogwartsController {
 
     private final JsonHandler jsonHandler;
 
+    private final DataHandler dataHandler;
+
     @Autowired
-    HogwartsController(JsonHandler jsonHandler) {
+    HogwartsController(JsonHandler jsonHandler, DataHandler dataHandler) {
         this.jsonHandler = jsonHandler;
+        this.dataHandler = dataHandler;
     }
 
     @GetMapping("/houses/{houseName}")
-    public String getCharactersByHouseName(@PathVariable("houseName") String houseName) throws FileNotFoundException {
-        JsonArray characters = jsonHandler.readCharactersFromFile();
-        List<String> idOfHouseMembers = jsonHandler.getMembersIdByHogwartsHouse(houseName);
-
-        List<JsonObject> houseCharacters = characters.getValuesAs(JsonObject.class)
-                .stream()
-                .filter(obj -> idOfHouseMembers.contains(obj.get("_id").toString()))
-                .collect(Collectors.toList());
-
-        return houseCharacters.toString();
+    public List<PotterCharacter> getCharactersByHouseName(@PathVariable("houseName") String houseName) {
+        return dataHandler.getHogwartsHouseCharacters(houseName);
     }
 
     @GetMapping("/employees")
