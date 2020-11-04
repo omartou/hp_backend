@@ -30,7 +30,7 @@ public class PotterApiService {
 
         int counter = 1;
         for (String idOfCharacter : idOfCharacters) {
-            System.out.println(counter + ": " + idOfCharacter);
+            System.out.println( (int)(((float) counter / idOfCharacters.size()) * 100) + "%");
             characters.put(idOfCharacter, getCharacterById(idOfCharacter));
             counter++;
         }

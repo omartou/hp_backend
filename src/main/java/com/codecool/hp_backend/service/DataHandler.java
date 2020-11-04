@@ -45,7 +45,6 @@ public class DataHandler {
         List<PotterCharacter> otherCharacters = new ArrayList<>();
         for (PotterCharacter character : characters) {
             if(!character.isMinistryOfMagic()
-                    /* && character.getSchool() != null */
                     && !Objects.equals(character.getSchool(), "Hogwarts School of Witchcraft and Wizardry")){
                 otherCharacters.add(character);
             }
