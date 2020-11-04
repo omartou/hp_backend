@@ -3,6 +3,8 @@ package com.codecool.hp_backend.controller;
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.service.JsonHandler;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.json.JsonArray;
@@ -71,6 +73,12 @@ public class OtherContoller {
     @GetMapping("/character/{id}")
     public PotterCharacter getCharacterById(@PathVariable("id") String id) {
         return potterApiService.getCharacterById(id);
+    }
+
+    @GetMapping("/characters")
+    public List<PotterCharacter> getCharacters() {
+        var id = potterApiService.getAllCharactersId();;
+        return potterApiService.generateCharacter(id);
     }
 }
 
