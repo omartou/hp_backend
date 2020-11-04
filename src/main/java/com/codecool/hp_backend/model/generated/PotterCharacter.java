@@ -52,6 +52,9 @@ public class PotterCharacter {
 	@JsonProperty("patronus")
 	private String patronus;
 
+	@JsonProperty("animagus")
+	private String animagus;
+
 	public String getRole(){
 		return role;
 	}
@@ -114,5 +117,9 @@ public class PotterCharacter {
 
 	public String getPatronus() {
 		return patronus;
+	}
+
+	public String getAnimagus() {
+		return animagus;
 	}
 }

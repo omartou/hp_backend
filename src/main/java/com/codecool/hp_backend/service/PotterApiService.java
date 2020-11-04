@@ -9,10 +9,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-//import javax.json.JsonArray;
 import java.util.*;
-//import java.util.Arrays;
+
 
 
 @Service
@@ -24,47 +22,23 @@ public class PotterApiService {
     @Value("${apikey}")
     private String apiKey;
 
-    public Map<String, PotterCharacter> generateCharacters(List<String> idOfCharacters) {
-        System.out.println("Start generating characters...");
-        Map<String, PotterCharacter> characters = new LinkedHashMap<>();
 
-        int counter = 1;
-        for (String idOfCharacter : idOfCharacters) {
-            System.out.println( (int)(((float) counter / idOfCharacters.size()) * 100) + "%");
-            characters.put(idOfCharacter, getCharacterById(idOfCharacter));
-            counter++;
-        }
-        System.out.println(characters.size() + " characters generated successfully!");
-        return characters;
-    }
-
-    public PotterCharacter getCharacterById(String id) {
-        RestTemplate template = new RestTemplate();
-        ResponseEntity<PotterCharacter> potterCharacterResponseEntity =
-                template.exchange(potterApiUrl + id + apiKey,
-                        HttpMethod.GET,
-                        null,
-                        PotterCharacter.class);
-        return potterCharacterResponseEntity.getBody();
-    }
-
-    public List<String> getIdOfCharacters() {
+    public Map<String, PotterCharacter> getAllCharacters() {
         RestTemplate template = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
-        List<String> idOfCharacters = new ArrayList<>();
-
-        ResponseEntity<String> response = template.getForEntity(potterApiUrl + apiKey,
-                String.class);
+        Map<String, PotterCharacter> characters = new LinkedHashMap<>();
+        ResponseEntity<String> response = template.getForEntity(potterApiUrl + apiKey, String.class);
         try {
             JsonNode root = mapper.readTree(response.getBody());
-            for (JsonNode elem : root) {
-                String id =  elem.get("_id").toString();
+            for (JsonNode node : root) {
+                String id =  node.get("_id").toString();
                 id = id.substring(1, id.length() -1);
-                idOfCharacters.add(id);
+                PotterCharacter character = mapper.treeToValue(node, PotterCharacter.class);
+                characters.put(id, character);
             }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return idOfCharacters;
+        return characters;
     }
 }
