@@ -31,6 +31,10 @@ public class CharacterStorage {
         return characters;
     }
 
+    public PotterCharacter getCharacterById(String id) {
+        return characters.get(id);
+    }
+
     public List<PotterCharacter> getCharacterList() {
         return new ArrayList<PotterCharacter>(characters.values());
     }

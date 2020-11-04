@@ -52,4 +52,18 @@ public class DataHandler {
         }
         return otherCharacters;
     }
+
+    public List<PotterCharacter> getMinistryOfMagicCharacters() {
+        List<PotterCharacter> ministryCharacters = new ArrayList<>();
+        for (PotterCharacter character : characters) {
+            if (character.isMinistryOfMagic()) {
+                ministryCharacters.add(character);
+            }
+        }
+        return ministryCharacters;
+    }
+
+    public PotterCharacter getCharacterById(String id) {
+        return characterStorage.getCharacterById(id);
+    }
 }
