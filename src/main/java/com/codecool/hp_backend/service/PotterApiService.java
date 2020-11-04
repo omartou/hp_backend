@@ -10,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.json.JsonArray;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+//import javax.json.JsonArray;
+import java.util.*;
+//import java.util.Arrays;
+
 
 @Service
 public class PotterApiService {
@@ -24,16 +24,17 @@ public class PotterApiService {
     @Value("${apikey}")
     private String apiKey;
 
+    public Map<String, PotterCharacter> generateCharacters(List<String> idOfCharacters) {
+        System.out.println("Start generating characters...");
+        Map<String, PotterCharacter> characters = new LinkedHashMap<>();
 
-
-    public List<PotterCharacter> generateCharacter(List<String> idOfCharacters) {
-        List<PotterCharacter> characters = new ArrayList<>();
-
+        int counter = 1;
         for (String idOfCharacter : idOfCharacters) {
-            System.out.println(idOfCharacter);
-            characters.add(getCharacterById(idOfCharacter));
+            System.out.println(counter + ": " + idOfCharacter);
+            characters.put(idOfCharacter, getCharacterById(idOfCharacter));
+            counter++;
         }
-
+        System.out.println(characters.size() + " characters generated successfully!");
         return characters;
     }
 
@@ -47,17 +48,17 @@ public class PotterApiService {
         return potterCharacterResponseEntity.getBody();
     }
 
-    public List<String> getAllCharactersId() {
+    public List<String> getIdOfCharacters() {
         RestTemplate template = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
         List<String> idOfCharacters = new ArrayList<>();
 
-        var response = template.getForEntity(potterApiUrl + apiKey,
+        ResponseEntity<String> response = template.getForEntity(potterApiUrl + apiKey,
                 String.class);
         try {
             JsonNode root = mapper.readTree(response.getBody());
-            for (var elem : root) {
-                var id =  elem.get("_id").toString();
+            for (JsonNode elem : root) {
+                String id =  elem.get("_id").toString();
                 id = id.substring(1, id.length() -1);
                 idOfCharacters.add(id);
             }
