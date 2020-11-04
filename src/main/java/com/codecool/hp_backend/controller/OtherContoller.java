@@ -2,12 +2,14 @@ package com.codecool.hp_backend.controller;
 
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.service.CharacterStorage;
+import com.codecool.hp_backend.service.DataHandler;
 import com.codecool.hp_backend.service.JsonHandler;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.xml.crypto.Data;
 
 import com.codecool.hp_backend.service.PotterApiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,42 +25,27 @@ public class OtherContoller {
     private final JsonHandler jsonHandler;
     private PotterApiService potterApiService;
     private CharacterStorage characterStorage;
+    private final DataHandler dataHandler;
 
     @Autowired
     public OtherContoller(JsonHandler jsonHandler,
                           PotterApiService potterApiService,
-                          CharacterStorage characterStorage) {
+                          CharacterStorage characterStorage,
+                          DataHandler dataHandler) {
         this.jsonHandler = jsonHandler;
         this.potterApiService = potterApiService;
         this.characterStorage = characterStorage;
+        this.dataHandler = dataHandler;
     }
 
     @GetMapping("/other")
-    public String getOtherCharacters() throws FileNotFoundException {
-        JsonArray characters = jsonHandler.readCharactersFromFile();
-
-        List<JsonObject> otherCharacters = characters.getValuesAs(JsonObject.class)
-                .stream()
-                .filter(obj -> obj.containsKey("ministryOfMagic"))
-                .filter(obj -> !Boolean.parseBoolean(obj.get("ministryOfMagic").toString()))
-                .filter(obj -> !obj.containsKey("school") || !obj.get("school").toString()
-                        .equals("Hogwarts School of Witchcraft and Wizardry"))
-                .collect(Collectors.toList());
-
-        return otherCharacters.toString();
+    public List<PotterCharacter> getOtherCharacters() {
+        return dataHandler.getOtherCharacters();
     }
 
     @GetMapping("/ministry")
-    public String getMinistryCharacters() throws FileNotFoundException {
-        JsonArray characters = jsonHandler.readCharactersFromFile();
-
-        List<JsonObject> ministryOfMagicCharacters = characters.getValuesAs(JsonObject.class)
-                .stream()
-                .filter(obj -> obj.containsKey("ministryOfMagic"))
-                .filter(obj -> Boolean.parseBoolean(obj.get("ministryOfMagic").toString()))
-                .collect(Collectors.toList());
-
-        return ministryOfMagicCharacters.toString();
+    public String getMinistryCharacters() {
+        return null;
     }
 
     @GetMapping("/character/{id}")

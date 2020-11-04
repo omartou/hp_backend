@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class DataHandler {
@@ -38,5 +39,17 @@ public class DataHandler {
             }
         }
         return employees;
+    }
+
+    public List<PotterCharacter> getOtherCharacters() {
+        List<PotterCharacter> otherCharacters = new ArrayList<>();
+        for (PotterCharacter character : characters) {
+            if(!character.isMinistryOfMagic()
+                    /* && character.getSchool() != null */
+                    && !Objects.equals(character.getSchool(), "Hogwarts School of Witchcraft and Wizardry")){
+                otherCharacters.add(character);
+            }
+        }
+        return otherCharacters;
     }
 }
