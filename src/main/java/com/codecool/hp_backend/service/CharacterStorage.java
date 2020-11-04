@@ -11,21 +11,13 @@ import java.util.Map;
 @Service
 public class CharacterStorage {
 
-    private PotterApiService potterApiService;
-
     @Autowired
     public CharacterStorage(PotterApiService potterApiService) {
-        this.potterApiService = potterApiService;
-        this.allCharactersId = potterApiService.getIdOfCharacters();
-        this.characters = potterApiService.generateCharacters(allCharactersId);
+        this.characters = potterApiService.getAllCharacters();
     }
 
-    private List<String> allCharactersId;
     private Map<String, PotterCharacter> characters;
 
-    public List<String> getAllCharactersId() {
-        return allCharactersId;
-    }
 
     public Map<String, PotterCharacter> getCharacters() {
         return characters;
