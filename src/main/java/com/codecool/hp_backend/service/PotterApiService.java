@@ -31,10 +31,8 @@ public class PotterApiService {
         try {
             JsonNode root = mapper.readTree(response.getBody());
             for (JsonNode node : root) {
-                String id =  node.get("_id").toString();
-                id = id.substring(1, id.length() -1);
                 PotterCharacter character = mapper.treeToValue(node, PotterCharacter.class);
-                characters.put(id, character);
+                characters.put(character.getId(), character);
             }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
