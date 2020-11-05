@@ -13,6 +13,7 @@ public class DataHandler {
     private final List<PotterCharacter> characters;
     private final List<PotterCharacter> houseQuizCharacters = new ArrayList<>();
 
+
     @Autowired
     public  DataHandler(CharacterStorage characterStorage) {
         this.characterStorage = characterStorage;

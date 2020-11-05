@@ -1,6 +1,8 @@
 package com.codecool.hp_backend.service;
 
 import com.codecool.hp_backend.model.generated.PotterCharacter;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class CharacterStorageTest {
+
     private static PotterApiService potterApiService;
     private static CharacterStorage characterStorage;
     private static Map<String, PotterCharacter> charactersTest = new LinkedHashMap<>();
@@ -29,17 +32,26 @@ class CharacterStorageTest {
 
 
     @Test
-    void getCharacters() {
+    void getCharactersReturnsMatchingElements() {
+        assertEquals(charactersTest, characterStorage.getCharacters());
     }
 
+
     @Test
-    void getCharacterByIdReturnsExistingCharacter() {
+    void getCharacterByIdWithExistingIdReturnsExistingCharacter() {
         PotterCharacter testCharacter = characterStorage.getCharacterById("2");
         assertEquals("Bloody Baron", testCharacter.getName());
         assertEquals("ghost", testCharacter.getSpecies());
     }
 
     @Test
-    void getCharacterList() {
+    void getCharacterByIdWithNonExistingIdThrowsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> characterStorage.getCharacterById("4"));
+    }
+
+    @Test
+    void getCharacterListReturnsMatchingElements() {
+        List<PotterCharacter> potterCharacterList = new ArrayList<>(charactersTest.values());
+        assertIterableEquals(potterCharacterList, characterStorage.getCharacterList());
     }
 }

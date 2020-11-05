@@ -6,64 +6,73 @@ import lombok.Getter;
 @Getter
 public class PotterCharacter {
 
-	public PotterCharacter(){}
+    public PotterCharacter() {
+    }
 
-	public PotterCharacter(String species, String name, String id, String house) {
-		this.species = species;
-		this.name = name;
-		this.id = id;
-		this.house = house;
-	}
+    public PotterCharacter(String species, String name, String id, String house) {
+        this.species = species;
+        this.name = name;
+        this.id = id;
+        this.house = house;
+    }
 
-	@JsonProperty("role")
-	private String role;
+    public PotterCharacter(String species, String name, String id, String house, String role) {
+        this.species = species;
+        this.name = name;
+        this.id = id;
+        this.house = house;
+        this.role = role;
+    }
 
-	@JsonProperty("bloodStatus")
-	private String bloodStatus;
+    @JsonProperty("role")
+    private String role;
 
-	@JsonProperty("school")
-	private String school;
+    @JsonProperty("bloodStatus")
+    private String bloodStatus;
 
-	@JsonProperty("species")
-	private String species;
+    @JsonProperty("school")
+    private String school;
 
-	@JsonProperty("deathEater")
-	private boolean deathEater;
+    @JsonProperty("species")
+    private String species;
 
-	@JsonProperty("__v")
-	private int V;
+    @JsonProperty("deathEater")
+    private boolean deathEater;
 
-	@JsonProperty("dumbledoresArmy")
-	private boolean dumbledoresArmy;
+    @JsonProperty("__v")
+    private int V;
 
-	@JsonProperty("name")
-	private String name;
+    @JsonProperty("dumbledoresArmy")
+    private boolean dumbledoresArmy;
 
-	@JsonProperty("ministryOfMagic")
-	private boolean ministryOfMagic;
+    @JsonProperty("name")
+    private String name;
 
-	@JsonProperty("_id")
-	private String id;
+    @JsonProperty("ministryOfMagic")
+    private boolean ministryOfMagic;
 
-	@JsonProperty("orderOfThePhoenix")
-	private boolean orderOfThePhoenix;
+    @JsonProperty("_id")
+    private String id;
 
-	@JsonProperty("house")
-	private String house;
+    @JsonProperty("orderOfThePhoenix")
+    private boolean orderOfThePhoenix;
 
-	@JsonProperty("boggart")
-	private String boggart;
+    @JsonProperty("house")
+    private String house;
 
-	@JsonProperty("alias")
-	private String alias;
+    @JsonProperty("boggart")
+    private String boggart;
 
-	@JsonProperty("wand")
-	private String wand;
+    @JsonProperty("alias")
+    private String alias;
 
-	@JsonProperty("patronus")
-	private String patronus;
+    @JsonProperty("wand")
+    private String wand;
 
-	@JsonProperty("animagus")
-	private String animagus;
+    @JsonProperty("patronus")
+    private String patronus;
+
+    @JsonProperty("animagus")
+    private String animagus;
 
 }
