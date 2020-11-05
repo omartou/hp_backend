@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 public class CharacterStorage {
@@ -24,7 +25,11 @@ public class CharacterStorage {
     }
 
     public PotterCharacter getCharacterById(String id) {
-        return characters.get(id);
+        if (characters.get(id) == null) {
+            throw new NullPointerException("Couldn't find character with id: " + id);
+        } else {
+            return characters.get(id);
+        }
     }
 
     public List<PotterCharacter> getCharacterList() {
