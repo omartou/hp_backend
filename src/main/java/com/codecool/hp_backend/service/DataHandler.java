@@ -7,17 +7,28 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 @Service
 public class DataHandler {
 
-    private CharacterStorage characterStorage;
+    private final CharacterStorage characterStorage;
     private final List<PotterCharacter> characters;
+    private final List<PotterCharacter> houseQuizCharacters = new ArrayList<>();
 
     @Autowired
     public  DataHandler(CharacterStorage characterStorage) {
         this.characterStorage = characterStorage;
         this.characters = characterStorage.getCharacterList();
+        initHouseQuizCharacters();
+    }
+
+    private void initHouseQuizCharacters() {
+        for (PotterCharacter character : characters) {
+            if (character.getHouse() != null) {
+                houseQuizCharacters.add(character);
+            }
+        }
     }
 
     public List<PotterCharacter> getHogwartsHouseCharacters(String house) {
@@ -65,4 +76,10 @@ public class DataHandler {
     public PotterCharacter getCharacterById(String id) {
         return characterStorage.getCharacterById(id);
     }
+
+    public PotterCharacter getRandomHouseQuizCharacter() {
+        Random random = new Random();
+        return houseQuizCharacters.get(random.nextInt(houseQuizCharacters.size()));
+    }
+
 }
