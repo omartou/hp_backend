@@ -35,7 +35,7 @@ class CharacterStorageTest {
     void getCharactersReturnsMatchingElements() {
         assertEquals(charactersTest, characterStorage.getCharacters());
     }
-    
+
 
     @Test
     void getCharacterByIdWithExistingIdReturnsExistingCharacter() {
