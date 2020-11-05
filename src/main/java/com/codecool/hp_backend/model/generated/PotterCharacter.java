@@ -6,6 +6,15 @@ import lombok.Getter;
 @Getter
 public class PotterCharacter {
 
+	public PotterCharacter(){}
+
+	public PotterCharacter(String species, String name, String id, String house) {
+		this.species = species;
+		this.name = name;
+		this.id = id;
+		this.house = house;
+	}
+
 	@JsonProperty("role")
 	private String role;
 

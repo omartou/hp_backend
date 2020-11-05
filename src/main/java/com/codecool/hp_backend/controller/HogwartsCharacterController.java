@@ -1,11 +1,9 @@
 package com.codecool.hp_backend.controller;
 
-import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.service.DataHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -20,12 +18,12 @@ public class HogwartsCharacterController {
     }
 
     @GetMapping("/houses/{houseName}")
-    public List<PotterCharacter> getCharactersByHouseName(@PathVariable("houseName") String houseName) {
-        return dataHandler.getHogwartsHouseCharacters(houseName);
+    public ResponseEntity<Object> getCharactersByHouseName(@PathVariable("houseName") String houseName) {
+        return ResponseEntity.ok(dataHandler.getHogwartsHouseCharacters(houseName));
     }
 
     @GetMapping("/employees")
-    public List<PotterCharacter> getEmployees() {
-        return dataHandler.getHogwartsEmployees();
+    public ResponseEntity<Object> getEmployees() {
+        return ResponseEntity.ok(dataHandler.getHogwartsEmployees());
     }
 }
