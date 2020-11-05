@@ -33,6 +33,6 @@ public class CharacterStorage {
     }
 
     public List<PotterCharacter> getCharacterList() {
-        return new ArrayList<PotterCharacter>(characters.values());
+        return new ArrayList<>(characters.values());
     }
 }
