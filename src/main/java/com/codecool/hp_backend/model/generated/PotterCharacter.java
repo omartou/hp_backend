@@ -9,20 +9,32 @@ public class PotterCharacter {
     public PotterCharacter() {
     }
 
-    public PotterCharacter(String species, String name, String id, String house) {
+    public PotterCharacter(String species, String name, String id, String house, String school) {
         this.species = species;
         this.name = name;
         this.id = id;
         this.house = house;
+        this.school = school;
     }
 
-    public PotterCharacter(String species, String name, String id, String house, String role) {
+    public PotterCharacter(String species, String name, String id, String house, String role, String school) {
         this.species = species;
         this.name = name;
         this.id = id;
         this.house = house;
         this.role = role;
+        this.school = school;
     }
+
+    public PotterCharacter(String school, String name, boolean ministryOfMagic) {
+        this.school = school;
+        this.name = name;
+        this.ministryOfMagic = ministryOfMagic;
+    }
+
+
+
+
 
     @JsonProperty("role")
     private String role;
