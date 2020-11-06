@@ -39,9 +39,8 @@ class CharacterStorageTest {
 
     @Test
     void getCharacterByIdWithExistingIdReturnsExistingCharacter() {
-        PotterCharacter testCharacter = characterStorage.getCharacterById("2");
-        assertEquals("Bloody Baron", testCharacter.getName());
-        assertEquals("ghost", testCharacter.getSpecies());
+        PotterCharacter testCharacter = charactersTest.get("2");
+        assertEquals(testCharacter, characterStorage.getCharacterById("2"));
     }
 
     @Test

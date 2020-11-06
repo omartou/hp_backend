@@ -5,20 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.crypto.Data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-
-import org.junit.jupiter.api.Test;
 
 class DataHandlerTest {
 
@@ -36,8 +27,8 @@ class DataHandlerTest {
                 "Hogwarts School of Witchcraft and Wizardry"));
         characters.add(new PotterCharacter("human", "Alecto Carrow", "4", null,
                 "Professor, Muggle Studies", "Hogwarts School of Witchcraft and Wizardry"));
-        characters
-                .add(new PotterCharacter("Beauxbatons Academy of Magic", "Fleur Delacour", false));
+        characters.add(new PotterCharacter("Beauxbatons Academy of Magic", "Fleur Delacour",
+                false));
         characters.add(new PotterCharacter("Hogwarts School of Witchcraft and Wizardry",
                 "Albus Dumbledore", true));
         characterStorage = mock(CharacterStorage.class);
@@ -48,48 +39,30 @@ class DataHandlerTest {
     @Test
     void getHogwartsHouseCharactersReturnsMatchingCharacters() {
         List<PotterCharacter> houseCharacterList = new ArrayList<>();
-        houseCharacterList.add(new PotterCharacter("human", "Draco Malfoy", "1", "Slytherin",
-                "Hogwarts School of Witchcraft and Wizardry"));
-        houseCharacterList.add(new PotterCharacter("ghost", "Bloody Baron", "2", "Slytherin",
-                "Hogwarts School of Witchcraft and Wizardry"));
-        assertEquals(houseCharacterList.size(),
-                dataHandler.getHogwartsHouseCharacters("Slytherin").size());
-        assertEquals(houseCharacterList.get(0).getName(),
-                dataHandler.getHogwartsHouseCharacters("Slytherin").get(0).getName());
+        houseCharacterList.add(characters.get(1));
+        houseCharacterList.add(characters.get(2));
+        assertIterableEquals(houseCharacterList, dataHandler.getHogwartsHouseCharacters("Slytherin"));
     }
 
     @Test
     void getHogwartsEmployeesReturnsMatchingCharacters() {
         List<PotterCharacter> employeeCharacterList = new ArrayList<>();
-
-        employeeCharacterList.add(new PotterCharacter("human", "Alecto Carrow", "4", null,
-                "Professor, Muggle Studies", "Hogwarts School of Witchcraft and Wizardry"));
-
-        assertEquals(employeeCharacterList.get(0).getName(),
-                dataHandler.getHogwartsEmployees().get(0).getName());
+        employeeCharacterList.add(characters.get(3));
+        assertIterableEquals(employeeCharacterList, dataHandler.getHogwartsEmployees());
     }
 
     @Test
     void getOtherCharacters() {
         List<PotterCharacter> otherCharacterList = new ArrayList<>();
-
-        otherCharacterList
-                .add(new PotterCharacter("Beauxbatons Academy of Magic", "Fleur Delacour", false));
-
-        assertEquals(otherCharacterList.get(0).getName(),
-                dataHandler.getOtherCharacters().get(0).getName());
+        otherCharacterList.add(characters.get(4));
+        assertIterableEquals(otherCharacterList, dataHandler.getOtherCharacters());
     }
 
     @Test
     void getMinistryOfMagicCharacters() {
         List<PotterCharacter> ministryCharacterList = new ArrayList<>();
-
-        ministryCharacterList
-                .add(new PotterCharacter("Hogwarts School of Witchcraft and Wizardry",
-                        "Albus Dumbledore", true));
-
-        assertEquals(ministryCharacterList.get(0).getName(),
-                dataHandler.getMinistryOfMagicCharacters().get(0).getName());
+        ministryCharacterList.add(characters.get(5));
+        assertIterableEquals(ministryCharacterList, dataHandler.getMinistryOfMagicCharacters());
     }
 
     @Test
