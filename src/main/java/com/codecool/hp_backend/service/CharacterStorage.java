@@ -2,19 +2,19 @@ package com.codecool.hp_backend.service;
 
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @Service
 public class CharacterStorage {
 
     @Autowired
-    public CharacterStorage(PotterApiService potterApiService) {
-        this.characters = potterApiService.getAllCharacters();
+    public CharacterStorage(@Qualifier("jsonHandler") CharacterProvider provider) {
+        this.characters = provider.getAllCharacters();
     }
 
     private Map<String, PotterCharacter> characters;

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -14,7 +13,7 @@ import java.util.*;
 
 
 @Service
-public class PotterApiService {
+public class PotterApiService implements CharacterProvider {
 
     @Value("${potterapi.url}")
     private String potterApiUrl;
@@ -22,7 +21,7 @@ public class PotterApiService {
     @Value("${apikey}")
     private String apiKey;
 
-
+    @Override
     public Map<String, PotterCharacter> getAllCharacters() {
         RestTemplate template = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
