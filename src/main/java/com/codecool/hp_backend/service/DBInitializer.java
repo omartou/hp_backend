@@ -1,18 +1,15 @@
 package com.codecool.hp_backend.service;
 
-import com.codecool.hp_backend.entity.Animagus;
-import com.codecool.hp_backend.entity.BloodStatus;
-import com.codecool.hp_backend.entity.House;
-import com.codecool.hp_backend.entity.School;
-import com.codecool.hp_backend.entity.Species;
-import com.codecool.hp_backend.repository.AnimagusRepository;
-import com.codecool.hp_backend.repository.BloodStatusRepository;
-import com.codecool.hp_backend.repository.HouseRepository;
-import com.codecool.hp_backend.repository.SchoolRepository;
-import com.codecool.hp_backend.repository.SpeciesRepository;
+import com.codecool.hp_backend.entity.*;
+import com.codecool.hp_backend.entity.Character;
+import com.codecool.hp_backend.model.generated.PotterCharacter;
+import com.codecool.hp_backend.repository.*;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DBInitializer {
@@ -32,6 +29,14 @@ public class DBInitializer {
     @Autowired
     private SpeciesRepository speciesRepository;
 
+    @Autowired
+    private CharacterRepository characterRepository;
+
+    @Autowired
+    private CharacterStorage characterStorage;
+
+
+
 
     public void initDB() {
         initHouseTable();
@@ -39,7 +44,7 @@ public class DBInitializer {
         initBloodStatusTable();
         initAnimagusTable();
         initSchoolTable();
-        initCharacterTable();
+        initCharacterTable(characterStorage.getCharacterList());
         //characterRepository.saveAll();
     }
 
@@ -47,16 +52,33 @@ public class DBInitializer {
 
     }
 
+    private void initCharacterTable(List<PotterCharacter> characters) {
+        List<Character> characterEntities = new ArrayList<>();
+        for (PotterCharacter character : characters) {
+            String characterHouse = character.getHouse();
+            House house = null;
+            if (characterHouse != null) {
+                house = houseRepository.findHouseByName(characterHouse);
+            }
+            Character entity = Character.builder()
+                    .name(character.getName())
+                    .house(house)
+                    .build();
+            characterEntities.add(entity);
+        }
+        characterRepository.saveAll(characterEntities);
+    }
+
     private void initSchoolTable() {
-        School beauxbatonsAcademyOfMagic = School.builder().school("Beauxbatons Academy of Magic")
+        School beauxbatonsAcademyOfMagic = School.builder().name("Beauxbatons Academy of Magic")
                 .build();
-        School durmstrangInstitute = School.builder().school("Durmstrang Institute")
+        School durmstrangInstitute = School.builder().name("Durmstrang Institute")
                 .build();
         School hogwartsAcademyOfWitchcraftAndWizardry
-                = School.builder().school("Hogwarts Academy of Witchcraft and Wizardry")
+                = School.builder().name("Hogwarts Academy of Witchcraft and Wizardry")
                 .build();
         School hogwartsSchoolOfWitchcraftAndWizardry
-                = School.builder().school("Hogwarts School of Witchcraft and Wizardry")
+                = School.builder().name("Hogwarts School of Witchcraft and Wizardry")
                 .build();
 
         schoolRepository.saveAll(Lists.newArrayList(beauxbatonsAcademyOfMagic, durmstrangInstitute,
@@ -64,14 +86,14 @@ public class DBInitializer {
     }
 
     private void initBloodStatusTable() {
-        BloodStatus unknown = BloodStatus.builder().bloodStatus("unknown").build();
-        BloodStatus halfBlood = BloodStatus.builder().bloodStatus("half-blood").build();
-        BloodStatus halfGiant = BloodStatus.builder().bloodStatus("half-giant").build();
-        BloodStatus muggle = BloodStatus.builder().bloodStatus("muggle").build();
-        BloodStatus muggleBorn = BloodStatus.builder().bloodStatus("muggle-born").build();
-        BloodStatus pureBlood = BloodStatus.builder().bloodStatus("pure-blood").build();
-        BloodStatus quarterVilla = BloodStatus.builder().bloodStatus("quarter-villa").build();
-        BloodStatus squib = BloodStatus.builder().bloodStatus("squib").build();
+        BloodStatus unknown = BloodStatus.builder().name("unknown").build();
+        BloodStatus halfBlood = BloodStatus.builder().name("half-blood").build();
+        BloodStatus halfGiant = BloodStatus.builder().name("half-giant").build();
+        BloodStatus muggle = BloodStatus.builder().name("muggle").build();
+        BloodStatus muggleBorn = BloodStatus.builder().name("muggle-born").build();
+        BloodStatus pureBlood = BloodStatus.builder().name("pure-blood").build();
+        BloodStatus quarterVilla = BloodStatus.builder().name("quarter-villa").build();
+        BloodStatus squib = BloodStatus.builder().name("squib").build();
 
         bloodStatusRepository.saveAll(
                 Lists.newArrayList(unknown,
@@ -83,37 +105,34 @@ public class DBInitializer {
                         quarterVilla,
                         squib));
 
-        bloodStatusRepository.saveAll(
-                Lists.newArrayList(unknown, halfBlood, halfGiant, muggle, muggleBorn, pureBlood,
-                        quarterVilla, squib));
     }
 
     private void initSpeciesTable() {
-        Species acromantula = Species.builder().species("acromantula").build();
-        Species Boarhound = Species.builder().species("Boarhound").build();
-        Species cat = Species.builder().species("cat").build();
-        Species centaur = Species.builder().species("centaur").build();
-        Species ghost = Species.builder().species("ghost").build();
-        Species giant = Species.builder().species("giant").build();
-        Species goblin = Species.builder().species("goblin").build();
-        Species greyOwl = Species.builder().species("Great Grey Owl").build();
-        Species halfGiant = Species.builder().species("half-giant").build();
-        Species hippogriff = Species.builder().species("hippogriff").build();
-        Species horcrux = Species.builder().species("horcrux").build();
-        Species houseElf = Species.builder().species("house-elf").build();
-        Species human = Species.builder().species("human").build();
-        Species humanMetamorphMagus = Species.builder().species("human (metamorphmagus)").build();
-        Species norwegianRidgeback = Species.builder().species("Norwegian RidgeBack").build();
-        Species partGoblin = Species.builder().species("part-goblin").build();
-        Species partHuman = Species.builder().species("part-human").build();
-        Species phoenix = Species.builder().species("phoenix").build();
-        Species poltergeist = Species.builder().species("poltergeist").build();
-        Species portrait = Species.builder().species("portrait").build();
-        Species scopsOwl = Species.builder().species("scops owl").build();
-        Species snowyOwl = Species.builder().species("Snowy Owl").build();
-        Species threeHeadedDog = Species.builder().species("three-headed dog").build();
-        Species toad = Species.builder().species("toad").build();
-        Species werewolf = Species.builder().species("werewolf").build();
+        Species acromantula = Species.builder().name("acromantula").build();
+        Species Boarhound = Species.builder().name("Boarhound").build();
+        Species cat = Species.builder().name("cat").build();
+        Species centaur = Species.builder().name("centaur").build();
+        Species ghost = Species.builder().name("ghost").build();
+        Species giant = Species.builder().name("giant").build();
+        Species goblin = Species.builder().name("goblin").build();
+        Species greyOwl = Species.builder().name("Great Grey Owl").build();
+        Species halfGiant = Species.builder().name("half-giant").build();
+        Species hippogriff = Species.builder().name("hippogriff").build();
+        Species horcrux = Species.builder().name("horcrux").build();
+        Species houseElf = Species.builder().name("house-elf").build();
+        Species human = Species.builder().name("human").build();
+        Species humanMetamorphMagus = Species.builder().name("human (metamorphmagus)").build();
+        Species norwegianRidgeback = Species.builder().name("Norwegian RidgeBack").build();
+        Species partGoblin = Species.builder().name("part-goblin").build();
+        Species partHuman = Species.builder().name("part-human").build();
+        Species phoenix = Species.builder().name("phoenix").build();
+        Species poltergeist = Species.builder().name("poltergeist").build();
+        Species portrait = Species.builder().name("portrait").build();
+        Species scopsOwl = Species.builder().name("scops owl").build();
+        Species snowyOwl = Species.builder().name("Snowy Owl").build();
+        Species threeHeadedDog = Species.builder().name("three-headed dog").build();
+        Species toad = Species.builder().name("toad").build();
+        Species werewolf = Species.builder().name("werewolf").build();
 
         speciesRepository.saveAll(Lists.newArrayList(acromantula,
                 Boarhound,
@@ -144,20 +163,20 @@ public class DBInitializer {
     }
 
     private void initAnimagusTable() {
-        Animagus beetle = Animagus.builder().animagus("beetle").build();
-        Animagus dog = Animagus.builder().animagus("dog").build();
-        Animagus rat = Animagus.builder().animagus("rat").build();
-        Animagus stag = Animagus.builder().animagus("stag").build();
-        Animagus tabbyCat = Animagus.builder().animagus("tabby cat").build();
+        Animagus beetle = Animagus.builder().name("beetle").build();
+        Animagus dog = Animagus.builder().name("dog").build();
+        Animagus rat = Animagus.builder().name("rat").build();
+        Animagus stag = Animagus.builder().name("stag").build();
+        Animagus tabbyCat = Animagus.builder().name("tabby cat").build();
 
         animagusRepository.saveAll(Lists.newArrayList(beetle, dog, rat, stag, tabbyCat));
     }
 
     private void initHouseTable() {
-        House gryffindor = House.builder().house("Gryffindor").build();
-        House hufflepuff = House.builder().house("Hufflepuff").build();
-        House ravenclaw = House.builder().house("Ravenclaw").build();
-        House slytherin = House.builder().house("Slytherin").build();
+        House gryffindor = House.builder().name("Gryffindor").build();
+        House hufflepuff = House.builder().name("Hufflepuff").build();
+        House ravenclaw = House.builder().name("Ravenclaw").build();
+        House slytherin = House.builder().name("Slytherin").build();
 
         houseRepository
                 .saveAll(Lists.newArrayList(gryffindor, hufflepuff, ravenclaw, slytherin));

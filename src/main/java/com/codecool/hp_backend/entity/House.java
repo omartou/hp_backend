@@ -1,16 +1,13 @@
 package com.codecool.hp_backend.entity;
 
-import com.codecool.hp_backend.repository.HouseRepository;
-import com.codecool.hp_backend.service.DBInitializer;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,6 +21,9 @@ public class House {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String house;
+    private String name;
+
+    @OneToMany(mappedBy = "house", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<Character> character;
 
 }

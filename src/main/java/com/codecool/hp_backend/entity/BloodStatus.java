@@ -21,5 +21,5 @@ public class BloodStatus {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String bloodStatus;
+    private String name;
 }

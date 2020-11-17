@@ -21,6 +21,6 @@ public class Species {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String species;
+    private String name;
 
 }

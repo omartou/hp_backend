@@ -21,6 +21,6 @@ public class Animagus {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String animagus;
+    private String name;
 
 }

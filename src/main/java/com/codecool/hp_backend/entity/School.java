@@ -21,6 +21,6 @@ public class School {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String school;
+    private String name;
 
 }
