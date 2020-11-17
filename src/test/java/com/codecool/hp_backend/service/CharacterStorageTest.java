@@ -16,7 +16,8 @@ import static org.mockito.Mockito.when;
 
 class CharacterStorageTest {
 
-    private static PotterApiService potterApiService;
+//    private static PotterApiService potterApiService;
+    private static CharacterProvider provider;
     private static CharacterStorage characterStorage;
     private static Map<String, PotterCharacter> charactersTest = new LinkedHashMap<>();
 
@@ -25,9 +26,9 @@ class CharacterStorageTest {
         charactersTest.put("0", new PotterCharacter("human", "Harry Potter", "0", "Gryffindor", "Hogwarts School of Witchcraft and Wizardry"));
         charactersTest.put("1", new PotterCharacter("human", "Draco Malfoy", "1", "Slytherin", "Hogwarts School of Witchcraft and Wizardry"));
         charactersTest.put("2", new PotterCharacter("ghost", "Bloody Baron", "2", "Slytherin", "Hogwarts School of Witchcraft and Wizardry"));
-        potterApiService = mock(PotterApiService.class);
-        when(potterApiService.getAllCharacters()).thenReturn(charactersTest);
-        characterStorage = new CharacterStorage(potterApiService);
+        provider = mock(PotterApiService.class);
+        when(provider.getAllCharacters()).thenReturn(charactersTest);
+        characterStorage = new CharacterStorage(provider);
     }
 
 
