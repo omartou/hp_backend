@@ -35,9 +35,6 @@ public class DBInitializer {
     @Autowired
     private CharacterStorage characterStorage;
 
-
-
-
     public void initDB() {
         initHouseTable();
         initSpeciesTable();
@@ -45,24 +42,39 @@ public class DBInitializer {
         initAnimagusTable();
         initSchoolTable();
         initCharacterTable(characterStorage.getCharacterList());
-        //characterRepository.saveAll();
-    }
-
-    private void initCharacterTable() {
-
     }
 
     private void initCharacterTable(List<PotterCharacter> characters) {
         List<Character> characterEntities = new ArrayList<>();
+
         for (PotterCharacter character : characters) {
-            String characterHouse = character.getHouse();
-            House house = null;
-            if (characterHouse != null) {
-                house = houseRepository.findHouseByName(characterHouse);
-            }
+//            String houseName = character.getHouse();
+//            House house = houseName != null ? houseRepository.findHouseByName(houseName) : null;
+            House house = houseRepository.findHouseByName(character.getHouse());
+
+            BloodStatus bloodStatus = bloodStatusRepository.findBloodStatusByName(character.getBloodStatus());
+            Species species = speciesRepository.findSpeciesByName(character.getSpecies());
+
+//            String animagusName = character.getAnimagus();
+//            Animagus animagus = animagusName != null ? animagusRepository.findAnimagusByName(animagusName) : null;
+            Animagus animagus = animagusRepository.findAnimagusByName(character.getAnimagus());
+
             Character entity = Character.builder()
                     .name(character.getName())
+                    .role(character.getRole())
                     .house(house)
+                    .school(character.getSchool())
+                    .ministryOfMagics(character.isMinistryOfMagic())
+                    .orderOfPhoenix(character.isOrderOfThePhoenix())
+                    .dumbledoresArmy(character.isDumbledoresArmy())
+                    .bloodStatus(bloodStatus)
+                    .deathEater(character.isDeathEater())
+                    .species(species)
+                    .boggart(character.getBoggart())
+                    .alias(character.getAlias())
+                    .wand(character.getWand())
+                    .patronus(character.getPatronus())
+                    .animagus(animagus)
                     .build();
             characterEntities.add(entity);
         }
@@ -104,7 +116,6 @@ public class DBInitializer {
                         pureBlood,
                         quarterVilla,
                         squib));
-
     }
 
     private void initSpeciesTable() {
@@ -159,7 +170,6 @@ public class DBInitializer {
                 threeHeadedDog,
                 toad,
                 werewolf));
-
     }
 
     private void initAnimagusTable() {
