@@ -35,42 +35,41 @@ public class PotterCharacter {
 
 
 
-
-    @JsonProperty("role")
-    private String role;
-
-    @JsonProperty("bloodStatus")
-    private String bloodStatus;
-
-    @JsonProperty("school")
-    private String school;
-
-    @JsonProperty("species")
-    private String species;
-
-    @JsonProperty("deathEater")
-    private boolean deathEater;
-
-    @JsonProperty("__v")
-    private int V;
-
-    @JsonProperty("dumbledoresArmy")
-    private boolean dumbledoresArmy;
+    @JsonProperty("_id")
+    private String id;
 
     @JsonProperty("name")
     private String name;
 
+    @JsonProperty("role")
+    private String role;
+
+    @JsonProperty("house")
+    private String house;
+
+    @JsonProperty("school")
+    private String school;
+
+    @JsonProperty("__v")
+    private int V;
+
     @JsonProperty("ministryOfMagic")
     private boolean ministryOfMagic;
-
-    @JsonProperty("_id")
-    private String id;
 
     @JsonProperty("orderOfThePhoenix")
     private boolean orderOfThePhoenix;
 
-    @JsonProperty("house")
-    private String house;
+    @JsonProperty("dumbledoresArmy")
+    private boolean dumbledoresArmy;
+
+    @JsonProperty("bloodStatus")
+    private String bloodStatus;
+
+    @JsonProperty("deathEater")
+    private boolean deathEater;
+
+    @JsonProperty("species")
+    private String species;
 
     @JsonProperty("boggart")
     private String boggart;
