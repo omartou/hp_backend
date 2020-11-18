@@ -2,10 +2,8 @@ package com.codecool.hp_backend.entity;
 
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import java.util.List;
 
@@ -24,6 +22,8 @@ public class House {
     private String name;
 
     @OneToMany(mappedBy = "house", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JsonIgnore
+    @ToString.Exclude
     private List<Character> character;
 
 }
