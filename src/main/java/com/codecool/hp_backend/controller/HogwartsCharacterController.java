@@ -14,7 +14,7 @@ public class HogwartsCharacterController {
     private final DataHandler dataHandler;
 
     @Autowired
-    HogwartsCharacterController(@Qualifier("inMemoryDataHandler") DataHandler dataHandler) {
+    HogwartsCharacterController(@Qualifier("DBDataHandler") DataHandler dataHandler) {
         this.dataHandler = dataHandler;
     }
 
