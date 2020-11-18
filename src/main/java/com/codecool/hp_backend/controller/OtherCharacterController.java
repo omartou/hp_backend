@@ -3,6 +3,7 @@ package com.codecool.hp_backend.controller;
 import com.codecool.hp_backend.service.DataHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,7 +18,7 @@ public class OtherCharacterController {
     private final DataHandler dataHandler;
 
     @Autowired
-    public OtherCharacterController(DataHandler dataHandler) {
+    public OtherCharacterController(@Qualifier("inMemoryDataHandler") DataHandler dataHandler) {
         this.dataHandler = dataHandler;
     }
 

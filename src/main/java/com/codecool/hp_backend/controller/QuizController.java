@@ -2,6 +2,7 @@ package com.codecool.hp_backend.controller;
 
 import com.codecool.hp_backend.service.DataHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ public class QuizController {
     private final DataHandler dataHandler;
 
     @Autowired
-    public QuizController(DataHandler dataHandler) {
+    public QuizController(@Qualifier("inMemoryDataHandler") DataHandler dataHandler) {
         this.dataHandler = dataHandler;
     }
 
