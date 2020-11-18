@@ -1,13 +1,19 @@
 package com.codecool.hp_backend.model.generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PotterCharacter {
 
-    public PotterCharacter() {
-    }
+//    public PotterCharacter() {
+//    }
 
     public PotterCharacter(String species, String name, String id, String house, String school) {
         this.species = species;
