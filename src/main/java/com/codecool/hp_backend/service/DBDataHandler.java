@@ -1,5 +1,7 @@
 package com.codecool.hp_backend.service;
 
+import com.codecool.hp_backend.entity.Character;
+import com.codecool.hp_backend.entity.House;
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ public class DBDataHandler implements DataHandler {
 
     private SpeciesRepository speciesRepository;
 
+    @Autowired
     private CharacterRepository characterRepository;
 
 
@@ -32,6 +35,12 @@ public class DBDataHandler implements DataHandler {
                          SpeciesRepository speciesRepository,
                          CharacterRepository characterRepository) {
         //TODO: We should get data from DB and store them in 'characters' variable
+        this.houseRepository = houseRepository;
+        this.bloodStatusRepository = bloodStatusRepository;
+        this.animagusRepository = animagusRepository;
+        this.schoolRepository = schoolRepository;
+        this.speciesRepository = speciesRepository;
+        this.characterRepository = characterRepository;
         this.characters = null;
 //        initHouseQuizCharacters();
     }
@@ -50,7 +59,38 @@ public class DBDataHandler implements DataHandler {
 
     @Override
     public List<PotterCharacter> getHogwartsHouseCharacters(String house) {
-        return null;
+        List<PotterCharacter> houseCharacters = new ArrayList<>();
+        House houseByName = houseRepository.findHouseByName(house.substring(0,1).toUpperCase() + house.substring(1));
+        List<Character> characters = characterRepository.getCharactersByHouse(houseByName);
+        System.out.println(characters);
+
+        for (Character character : characters) {
+            String animagus = null;
+            if(character.getAnimagus() != null) {
+                animagus = character.getAnimagus().getName();
+            }
+
+            PotterCharacter potterCharacter = PotterCharacter.builder()
+                    .id(character.getId().toString())
+                    .name(character.getName())
+                    .role(character.getRole())
+                    .house(character.getHouse().getName())
+                    .school(character.getSchool().getName())
+                    .ministryOfMagic(character.isMinistryOfMagics())
+                    .orderOfThePhoenix(character.isOrderOfPhoenix())
+                    .dumbledoresArmy(character.isDumbledoresArmy())
+                    .bloodStatus(character.getBloodStatus().getName())
+                    .deathEater(character.isDeathEater())
+                    .species(character.getSpecies().getName())
+                    .boggart(character.getBoggart())
+                    .alias(character.getAlias())
+                    .wand(character.getWand())
+                    .patronus(character.getPatronus())
+                    .animagus(animagus)
+                    .build();
+            houseCharacters.add(potterCharacter);
+        }
+        return houseCharacters;
     }
 
     @Override
