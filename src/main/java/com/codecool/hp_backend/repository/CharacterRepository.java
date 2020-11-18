@@ -44,4 +44,6 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
     List<Character> getCharactersByHouseName(@Param("name") String name);
 
     List<Character> getCharactersByHouse(House house);
+
+    List<Character> getCharactersByRoleContaining(String professor);
 }

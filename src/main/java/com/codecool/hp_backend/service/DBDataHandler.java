@@ -95,7 +95,40 @@ public class DBDataHandler implements DataHandler {
 
     @Override
     public List<PotterCharacter> getHogwartsEmployees() {
-        return null;
+        List<PotterCharacter> employees = new ArrayList<>();
+        List<Character> professors = characterRepository.getCharactersByRoleContaining("Professor");
+
+        for (Character professor : professors) {
+            String animagus = null;
+            String house = null;
+            if(professor.getAnimagus() != null) {
+                animagus = professor.getAnimagus().getName();
+            }
+            if(professor.getHouse() != null){
+                house = professor.getHouse().getName();
+            }
+
+            PotterCharacter potterCharacter = PotterCharacter.builder()
+                    .id(professor.getId().toString())
+                    .name(professor.getName())
+                    .role(professor.getRole())
+                    .house(house)
+                    .school(professor.getSchool().getName())
+                    .ministryOfMagic(professor.isMinistryOfMagics())
+                    .orderOfThePhoenix(professor.isOrderOfPhoenix())
+                    .dumbledoresArmy(professor.isDumbledoresArmy())
+                    .bloodStatus(professor.getBloodStatus().getName())
+                    .deathEater(professor.isDeathEater())
+                    .species(professor.getSpecies().getName())
+                    .boggart(professor.getBoggart())
+                    .alias(professor.getAlias())
+                    .wand(professor.getWand())
+                    .patronus(professor.getPatronus())
+                    .animagus(animagus)
+                    .build();
+            employees.add(potterCharacter);
+        }
+        return employees;
     }
 
     @Override
