@@ -48,15 +48,10 @@ public class DBInitializer {
         List<Character> characterEntities = new ArrayList<>();
 
         for (PotterCharacter character : characters) {
-//            String houseName = character.getHouse();
-//            House house = houseName != null ? houseRepository.findHouseByName(houseName) : null;
             House house = houseRepository.findHouseByName(character.getHouse());
             School school = schoolRepository.findSchoolByName(character.getSchool());
             BloodStatus bloodStatus = bloodStatusRepository.findBloodStatusByName(character.getBloodStatus());
             Species species = speciesRepository.findSpeciesByName(character.getSpecies());
-
-//            String animagusName = character.getAnimagus();
-//            Animagus animagus = animagusName != null ? animagusRepository.findAnimagusByName(animagusName) : null;
             Animagus animagus = animagusRepository.findAnimagusByName(character.getAnimagus());
 
             Character entity = Character.builder()
