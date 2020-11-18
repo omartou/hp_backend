@@ -26,7 +26,8 @@ public class Character {
     @ManyToOne
     private House house;
 
-    private String school;
+    @ManyToOne
+    private School school;
 
     private boolean ministryOfMagics;
 
