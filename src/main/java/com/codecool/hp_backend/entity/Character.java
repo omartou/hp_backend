@@ -29,15 +29,19 @@ public class Character {
     @ManyToOne
     private School school;
 
+    @Column(nullable = false)
     private boolean ministryOfMagics;
 
+    @Column(nullable = false)
     private boolean orderOfPhoenix;
 
+    @Column(nullable = false)
     private boolean dumbledoresArmy;
 
     @ManyToOne
     private BloodStatus bloodStatus;
 
+    @Column(nullable = false)
     private boolean deathEater;
 
     @ManyToOne
