@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class DataHandlerTest {
+class InMemoryDataHandlerTest {
 
     private static CharacterStorage characterStorage;
-    private static DataHandler dataHandler;
+    private static InMemoryDataHandler dataHandler;
     private final List<PotterCharacter> characters = new ArrayList<>();
     
     @BeforeEach
@@ -33,7 +33,7 @@ class DataHandlerTest {
                 "Albus Dumbledore", true));
         characterStorage = mock(CharacterStorage.class);
         when(characterStorage.getCharacterList()).thenReturn(characters);
-        dataHandler = new DataHandler(characterStorage);
+        dataHandler = new InMemoryDataHandler(characterStorage);
     }
 
     @Test
