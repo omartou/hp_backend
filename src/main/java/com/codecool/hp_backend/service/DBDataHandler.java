@@ -61,36 +61,9 @@ public class DBDataHandler implements DataHandler {
     @Override
     public List<PotterCharacter> getHogwartsHouseCharacters(String house) {
         List<PotterCharacter> houseCharacters = new ArrayList<>();
-        House houseByName = houseRepository.findHouseByName(house.substring(0,1).toUpperCase() + house.substring(1));
+        House houseByName = houseRepository.findHouseByName(house.substring(0, 1).toUpperCase() + house.substring(1));
         List<Character> characters = characterRepository.getCharactersByHouse(houseByName);
-        System.out.println(characters);
-
-        for (Character character : characters) {
-            String animagus = null;
-            if(character.getAnimagus() != null) {
-                animagus = character.getAnimagus().getName();
-            }
-
-            PotterCharacter potterCharacter = PotterCharacter.builder()
-                    .id(character.getId().toString())
-                    .name(character.getName())
-                    .role(character.getRole())
-                    .house(character.getHouse().getName())
-                    .school(character.getSchool().getName())
-                    .ministryOfMagic(character.isMinistryOfMagics())
-                    .orderOfThePhoenix(character.isOrderOfPhoenix())
-                    .dumbledoresArmy(character.isDumbledoresArmy())
-                    .bloodStatus(character.getBloodStatus().getName())
-                    .deathEater(character.isDeathEater())
-                    .species(character.getSpecies().getName())
-                    .boggart(character.getBoggart())
-                    .alias(character.getAlias())
-                    .wand(character.getWand())
-                    .patronus(character.getPatronus())
-                    .animagus(animagus)
-                    .build();
-            houseCharacters.add(potterCharacter);
-        }
+        houseCharacters = convertCharactersToPotterCharacters(characters);
         return houseCharacters;
     }
 
@@ -98,37 +71,8 @@ public class DBDataHandler implements DataHandler {
     public List<PotterCharacter> getHogwartsEmployees() {
         List<PotterCharacter> employees = new ArrayList<>();
         List<Character> professors = characterRepository.getCharactersByRoleContaining("Professor");
+        employees = convertCharactersToPotterCharacters(professors);
 
-        for (Character professor : professors) {
-            String animagus = null;
-            String house = null;
-            if(professor.getAnimagus() != null) {
-                animagus = professor.getAnimagus().getName();
-            }
-            if(professor.getHouse() != null){
-                house = professor.getHouse().getName();
-            }
-
-            PotterCharacter potterCharacter = PotterCharacter.builder()
-                    .id(professor.getId().toString())
-                    .name(professor.getName())
-                    .role(professor.getRole())
-                    .house(house)
-                    .school(professor.getSchool().getName())
-                    .ministryOfMagic(professor.isMinistryOfMagics())
-                    .orderOfThePhoenix(professor.isOrderOfPhoenix())
-                    .dumbledoresArmy(professor.isDumbledoresArmy())
-                    .bloodStatus(professor.getBloodStatus().getName())
-                    .deathEater(professor.isDeathEater())
-                    .species(professor.getSpecies().getName())
-                    .boggart(professor.getBoggart())
-                    .alias(professor.getAlias())
-                    .wand(professor.getWand())
-                    .patronus(professor.getPatronus())
-                    .animagus(animagus)
-                    .build();
-            employees.add(potterCharacter);
-        }
         return employees;
     }
 
@@ -137,50 +81,16 @@ public class DBDataHandler implements DataHandler {
         List<PotterCharacter> others = new ArrayList<>();
         List<Character> otherCharacters = characterRepository
                 .getCharactersByMinistryOfMagicsIsFalseAndSchoolIsNullOrSchoolNameNotContains("Hogwarts");
-        for (Character otherCharacter:otherCharacters) {
-            String animagus = null;
-            String house = null;
-            String school = null;
-            String species = null;
-            if(otherCharacter.getAnimagus() != null) {
-                animagus = otherCharacter.getAnimagus().getName();
-            }
-            if(otherCharacter.getHouse() != null){
-                house = otherCharacter.getHouse().getName();
-            }
-            if(otherCharacter.getSchool() !=null){
-                school = otherCharacter.getSchool().getName();
-            }
-            if(otherCharacter.getSpecies() != null){
-                species = otherCharacter.getSpecies().getName();
-            }
-
-            PotterCharacter potterCharacter = PotterCharacter.builder()
-                    .id(otherCharacter.getId().toString())
-                    .name(otherCharacter.getName())
-                    .role(otherCharacter.getRole())
-                    .house(house)
-                    .school(school)
-                    .ministryOfMagic(otherCharacter.isMinistryOfMagics())
-                    .orderOfThePhoenix(otherCharacter.isOrderOfPhoenix())
-                    .dumbledoresArmy(otherCharacter.isDumbledoresArmy())
-                    .bloodStatus(otherCharacter.getBloodStatus().getName())
-                    .deathEater(otherCharacter.isDeathEater())
-                    .species(species)
-                    .boggart(otherCharacter.getBoggart())
-                    .alias(otherCharacter.getAlias())
-                    .wand(otherCharacter.getWand())
-                    .patronus(otherCharacter.getPatronus())
-                    .animagus(animagus)
-                    .build();
-            others.add(potterCharacter);
-        }
+        others = convertCharactersToPotterCharacters(otherCharacters);
         return others;
     }
 
     @Override
     public List<PotterCharacter> getMinistryOfMagicCharacters() {
-        return null;
+        List<PotterCharacter> ministryCharacters = new ArrayList<>();
+        List<Character> ministry = characterRepository.getCharactersByMinistryOfMagicsIsTrue();
+        ministryCharacters = convertCharactersToPotterCharacters(ministry);
+        return ministryCharacters;
     }
 
     @Override
@@ -191,5 +101,50 @@ public class DBDataHandler implements DataHandler {
     @Override
     public PotterCharacter getRandomHouseQuizCharacter() {
         return null;
+    }
+
+
+
+    private List<PotterCharacter> convertCharactersToPotterCharacters(List<Character> characters) {
+        List<PotterCharacter> potterCharacters = new ArrayList<>();
+        for (Character character : characters) {
+            String animagus = null;
+            String house = null;
+            String school = null;
+            String species = null;
+            if (character.getAnimagus() != null) {
+                animagus = character.getAnimagus().getName();
+            }
+            if (character.getHouse() != null) {
+                house = character.getHouse().getName();
+            }
+            if (character.getSchool() != null) {
+                school = character.getSchool().getName();
+            }
+            if (character.getSpecies() != null) {
+                species = character.getSpecies().getName();
+            }
+
+            PotterCharacter potterCharacter = PotterCharacter.builder()
+                    .id(character.getId().toString())
+                    .name(character.getName())
+                    .role(character.getRole())
+                    .house(house)
+                    .school(school)
+                    .ministryOfMagic(character.isMinistryOfMagics())
+                    .orderOfThePhoenix(character.isOrderOfPhoenix())
+                    .dumbledoresArmy(character.isDumbledoresArmy())
+                    .bloodStatus(character.getBloodStatus().getName())
+                    .deathEater(character.isDeathEater())
+                    .species(species)
+                    .boggart(character.getBoggart())
+                    .alias(character.getAlias())
+                    .wand(character.getWand())
+                    .patronus(character.getPatronus())
+                    .animagus(animagus)
+                    .build();
+            potterCharacters.add(potterCharacter);
+        }
+        return potterCharacters;
     }
 }

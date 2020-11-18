@@ -48,5 +48,7 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
 
     List<Character> getCharactersByRoleContaining(String professor);
 
+    List<Character> getCharactersByMinistryOfMagicsIsTrue();
+
     List<Character> getCharactersByMinistryOfMagicsIsFalseAndSchoolIsNullOrSchoolNameNotContains(String school);
 }
