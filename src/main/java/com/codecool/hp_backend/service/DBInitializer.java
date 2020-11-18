@@ -42,6 +42,16 @@ public class DBInitializer {
         initAnimagusTable();
         initSchoolTable();
         initCharacterTable(characterStorage.getCharacterList());
+        //ONLY FOR TESTING PURPOSES
+        List<Character> characters = characterRepository.findAll();
+        for (Character character : characters) {
+            Animagus animagus = character.getAnimagus();
+            if (animagus != null) {
+                Long animagusId = animagus.getId();
+                String animagusName = animagusRepository.getAnimagusNameById(animagusId);
+                System.out.println(animagusName);
+            }
+        }
     }
 
     private void initCharacterTable(List<PotterCharacter> characters) {
@@ -174,7 +184,7 @@ public class DBInitializer {
 
     private void initAnimagusTable() {
         Animagus beetle = Animagus.builder().name("beetle").build();
-        Animagus dog = Animagus.builder().name("dog").build();
+        Animagus dog = Animagus.builder().name("black dog").build();
         Animagus rat = Animagus.builder().name("rat").build();
         Animagus stag = Animagus.builder().name("stag").build();
         Animagus tabbyCat = Animagus.builder().name("tabby cat").build();
