@@ -2,6 +2,7 @@ package com.codecool.hp_backend.service;
 
 import com.codecool.hp_backend.entity.Character;
 import com.codecool.hp_backend.entity.House;
+import com.codecool.hp_backend.entity.School;
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,7 +134,48 @@ public class DBDataHandler implements DataHandler {
 
     @Override
     public List<PotterCharacter> getOtherCharacters() {
-        return null;
+        List<PotterCharacter> others = new ArrayList<>();
+        List<Character> otherCharacters = characterRepository
+                .getCharactersByMinistryOfMagicsIsFalseAndSchoolIsNullOrSchoolNameNotContains("Hogwarts");
+        for (Character otherCharacter:otherCharacters) {
+            String animagus = null;
+            String house = null;
+            String school = null;
+            String species = null;
+            if(otherCharacter.getAnimagus() != null) {
+                animagus = otherCharacter.getAnimagus().getName();
+            }
+            if(otherCharacter.getHouse() != null){
+                house = otherCharacter.getHouse().getName();
+            }
+            if(otherCharacter.getSchool() !=null){
+                school = otherCharacter.getSchool().getName();
+            }
+            if(otherCharacter.getSpecies() != null){
+                species = otherCharacter.getSpecies().getName();
+            }
+
+            PotterCharacter potterCharacter = PotterCharacter.builder()
+                    .id(otherCharacter.getId().toString())
+                    .name(otherCharacter.getName())
+                    .role(otherCharacter.getRole())
+                    .house(house)
+                    .school(school)
+                    .ministryOfMagic(otherCharacter.isMinistryOfMagics())
+                    .orderOfThePhoenix(otherCharacter.isOrderOfPhoenix())
+                    .dumbledoresArmy(otherCharacter.isDumbledoresArmy())
+                    .bloodStatus(otherCharacter.getBloodStatus().getName())
+                    .deathEater(otherCharacter.isDeathEater())
+                    .species(species)
+                    .boggart(otherCharacter.getBoggart())
+                    .alias(otherCharacter.getAlias())
+                    .wand(otherCharacter.getWand())
+                    .patronus(otherCharacter.getPatronus())
+                    .animagus(animagus)
+                    .build();
+            others.add(potterCharacter);
+        }
+        return others;
     }
 
     @Override
