@@ -51,7 +51,7 @@ public class DBInitializer {
 //            String houseName = character.getHouse();
 //            House house = houseName != null ? houseRepository.findHouseByName(houseName) : null;
             House house = houseRepository.findHouseByName(character.getHouse());
-
+            School school = schoolRepository.findSchoolByName(character.getSchool());
             BloodStatus bloodStatus = bloodStatusRepository.findBloodStatusByName(character.getBloodStatus());
             Species species = speciesRepository.findSpeciesByName(character.getSpecies());
 
@@ -63,7 +63,7 @@ public class DBInitializer {
                     .name(character.getName())
                     .role(character.getRole())
                     .house(house)
-                    .school(character.getSchool())
+                    .school(school)
                     .ministryOfMagics(character.isMinistryOfMagic())
                     .orderOfPhoenix(character.isOrderOfThePhoenix())
                     .dumbledoresArmy(character.isDumbledoresArmy())
