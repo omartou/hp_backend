@@ -17,7 +17,7 @@ public class QuizController {
     private final DataHandler dataHandler;
 
     @Autowired
-    public QuizController(@Qualifier("inMemoryDataHandler") DataHandler dataHandler) {
+    public QuizController(@Qualifier("DBDataHandler") DataHandler dataHandler) {
         this.dataHandler = dataHandler;
     }
 

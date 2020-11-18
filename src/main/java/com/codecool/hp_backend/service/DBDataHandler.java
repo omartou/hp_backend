@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class DBDataHandler implements DataHandler {
@@ -114,7 +115,10 @@ public class DBDataHandler implements DataHandler {
 
     @Override
     public PotterCharacter getRandomHouseQuizCharacter() {
-        return null;
+        List<Character> houseCharacters = characterRepository.getCharactersByHouseIsNotNull();
+        Random random = new Random();
+
+        return convertCharacterToPotterCharacter(houseCharacters.get(random.nextInt(houseCharacters.size())));
     }
 
 
