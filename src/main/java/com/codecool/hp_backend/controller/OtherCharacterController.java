@@ -18,7 +18,7 @@ public class OtherCharacterController {
     private final DataHandler dataHandler;
 
     @Autowired
-    public OtherCharacterController(@Qualifier("DBDataHandler") DataHandler dataHandler) {
+    public OtherCharacterController(@Qualifier("dataHandlerDB") DataHandler dataHandler) {
         this.dataHandler = dataHandler;
     }
 
