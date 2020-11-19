@@ -8,6 +8,4 @@ import org.springframework.data.repository.query.Param;
 public interface BloodStatusRepository extends JpaRepository<BloodStatus, Long> {
     BloodStatus findBloodStatusByName(String bloodStatus);
 
-    @Query("SELECT bs.name FROM BloodStatus bs WHERE bs.id = :id")
-    String getBloodStatusNameById(@Param("id") Long id);
 }

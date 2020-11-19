@@ -7,7 +7,4 @@ import org.springframework.data.repository.query.Param;
 
 public interface SchoolRepository extends JpaRepository<School, Long> {
     School findSchoolByName(String school);
-
-    @Query("SELECT s.name FROM School s WHERE s.id = :id")
-    String getSchoolNameById(@Param("id") Long id);
 }
