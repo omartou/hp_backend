@@ -7,15 +7,14 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class InMemoryDataHandler implements DataHandler {
+public class DataHandlerMem implements DataHandler {
 
     private final CharacterStorage characterStorage;
     private final List<PotterCharacter> characters;
     private final List<PotterCharacter> houseQuizCharacters = new ArrayList<>();
 
-
     @Autowired
-    public InMemoryDataHandler(CharacterStorage characterStorage) {
+    public DataHandlerMem(CharacterStorage characterStorage) {
         this.characterStorage = characterStorage;
         this.characters = characterStorage.getCharacterList();
         initHouseQuizCharacters();
@@ -45,7 +44,7 @@ public class InMemoryDataHandler implements DataHandler {
     public List<PotterCharacter> getHogwartsEmployees() {
         List<PotterCharacter> employees = new ArrayList<>();
         for (PotterCharacter character : characters) {
-            if(character.getRole() != null && character.getRole().split(",")[0].equals("Professor")) {
+            if(character.getRole() != null && character.getRole().contains("Professor")) {
                 employees.add(character);
             }
         }
@@ -57,7 +56,8 @@ public class InMemoryDataHandler implements DataHandler {
         List<PotterCharacter> otherCharacters = new ArrayList<>();
         for (PotterCharacter character : characters) {
             if(!character.isMinistryOfMagic()
-                    && !Objects.equals(character.getSchool(), "Hogwarts School of Witchcraft and Wizardry")){
+                    && (character.getSchool() == null
+                    || !character.getSchool().contains("Hogwarts"))){
                 otherCharacters.add(character);
             }
         }
