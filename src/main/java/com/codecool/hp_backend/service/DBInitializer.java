@@ -20,6 +20,7 @@ public class DBInitializer {
     private final SpeciesRepository speciesRepository;
     private final CharacterRepository characterRepository;
     private final CharacterStorage characterStorage;
+    private final WandRepository wandRepository;
 
     @Autowired
     public DBInitializer(HouseRepository houseRepository,
@@ -28,7 +29,8 @@ public class DBInitializer {
                          SchoolRepository schoolRepository,
                          SpeciesRepository speciesRepository,
                          CharacterRepository characterRepository,
-                         CharacterStorage characterStorage) {
+                         CharacterStorage characterStorage,
+                         WandRepository wandRepository) {
         this.houseRepository = houseRepository;
         this.bloodStatusRepository = bloodStatusRepository;
         this.animagusRepository = animagusRepository;
@@ -36,6 +38,7 @@ public class DBInitializer {
         this.speciesRepository = speciesRepository;
         this.characterRepository = characterRepository;
         this.characterStorage = characterStorage;
+        this.wandRepository = wandRepository;
     }
 
     public void initDB() {
@@ -56,6 +59,16 @@ public class DBInitializer {
             BloodStatus bloodStatus = bloodStatusRepository.findBloodStatusByName(character.getBloodStatus());
             Species species = speciesRepository.findSpeciesByName(character.getSpecies());
             Animagus animagus = animagusRepository.findAnimagusByName(character.getAnimagus());
+            Wand wand = null;
+            if(character.getWand() != null) {
+                String[] wandParts = character.getWand().split(", ");
+                wand = Wand.builder()
+                        .wood(wandParts[0])
+                        .length(wandParts[1])
+                        .core(Core.getEnumByString(wandParts[2]))
+                        .build();
+            }
+
 
             Character entity = Character.builder()
                     .name(character.getName())
@@ -70,11 +83,17 @@ public class DBInitializer {
                     .species(species)
                     .boggart(character.getBoggart())
                     .alias(character.getAlias())
-                    .wand(character.getWand())
+                    .wand(wand)
                     .patronus(character.getPatronus())
                     .animagus(animagus)
                     .build();
             characterEntities.add(entity);
+
+            if (wand != null) {
+                wand.setOwner(entity);
+                wandRepository.save(wand);
+            }
+
         }
 
         characterRepository.saveAll(characterEntities);
