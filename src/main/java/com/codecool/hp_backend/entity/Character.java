@@ -51,7 +51,8 @@ public class Character {
 
     private String alias;
 
-    private String wand;
+    @OneToOne
+    private Wand wand;
 
     private String patronus;
 

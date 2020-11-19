@@ -96,6 +96,7 @@ public class DataHandlerDB implements DataHandler {
             String animagus = character.getAnimagus() != null ? character.getAnimagus().getName() : null;
             String house = character.getHouse() != null ? character.getHouse().getName() : null;
             String school = character.getSchool() != null ? character.getSchool().getName() : null;
+            String wand = character.getWand() != null ? character.getWand().toString() : null;
 
         return PotterCharacter.builder()
                 .id(character.getId().toString())
@@ -111,7 +112,7 @@ public class DataHandlerDB implements DataHandler {
                 .species(character.getSpecies().getName())
                 .boggart(character.getBoggart())
                 .alias(character.getAlias())
-                .wand(character.getWand())
+                .wand(wand)
                 .patronus(character.getPatronus())
                 .animagus(animagus)
                 .build();
