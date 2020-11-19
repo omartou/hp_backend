@@ -1,15 +1,12 @@
 package com.codecool.hp_backend;
 
-import com.codecool.hp_backend.repository.HouseRepository;
 import com.codecool.hp_backend.service.DBInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
-import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootApplication
 public class HpBackendApplication {
