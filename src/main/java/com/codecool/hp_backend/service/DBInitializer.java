@@ -4,7 +4,6 @@ import com.codecool.hp_backend.entity.*;
 import com.codecool.hp_backend.entity.Character;
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.repository.*;
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,26 +13,30 @@ import java.util.List;
 @Service
 public class DBInitializer {
 
-    @Autowired
-    private HouseRepository houseRepository;
+    private final HouseRepository houseRepository;
+    private final BloodStatusRepository bloodStatusRepository;
+    private final AnimagusRepository animagusRepository;
+    private final SchoolRepository schoolRepository;
+    private final SpeciesRepository speciesRepository;
+    private final CharacterRepository characterRepository;
+    private final CharacterStorage characterStorage;
 
     @Autowired
-    private BloodStatusRepository bloodStatusRepository;
-
-    @Autowired
-    private AnimagusRepository animagusRepository;
-
-    @Autowired
-    private SchoolRepository schoolRepository;
-
-    @Autowired
-    private SpeciesRepository speciesRepository;
-
-    @Autowired
-    private CharacterRepository characterRepository;
-
-    @Autowired
-    private CharacterStorage characterStorage;
+    public DBInitializer(HouseRepository houseRepository,
+                         BloodStatusRepository bloodStatusRepository,
+                         AnimagusRepository animagusRepository,
+                         SchoolRepository schoolRepository,
+                         SpeciesRepository speciesRepository,
+                         CharacterRepository characterRepository,
+                         CharacterStorage characterStorage) {
+        this.houseRepository = houseRepository;
+        this.bloodStatusRepository = bloodStatusRepository;
+        this.animagusRepository = animagusRepository;
+        this.schoolRepository = schoolRepository;
+        this.speciesRepository = speciesRepository;
+        this.characterRepository = characterRepository;
+        this.characterStorage = characterStorage;
+    }
 
     public void initDB() {
         initHouseTable();
@@ -42,16 +45,6 @@ public class DBInitializer {
         initAnimagusTable();
         initSchoolTable();
         initCharacterTable(characterStorage.getCharacterList());
-        //ONLY FOR TESTING PURPOSES
-        List<Character> characters = characterRepository.findAll();
-        for (Character character : characters) {
-            Animagus animagus = character.getAnimagus();
-            if (animagus != null) {
-                Long animagusId = animagus.getId();
-                String animagusName = animagusRepository.getAnimagusNameById(animagusId);
-                System.out.println(animagusName);
-            }
-        }
     }
 
     private void initCharacterTable(List<PotterCharacter> characters) {
@@ -83,118 +76,90 @@ public class DBInitializer {
                     .build();
             characterEntities.add(entity);
         }
+
         characterRepository.saveAll(characterEntities);
     }
 
     private void initSchoolTable() {
-        School beauxbatonsAcademyOfMagic = School.builder().name("Beauxbatons Academy of Magic")
-                .build();
-        School durmstrangInstitute = School.builder().name("Durmstrang Institute")
-                .build();
-        School hogwartsAcademyOfWitchcraftAndWizardry
-                = School.builder().name("Hogwarts Academy of Witchcraft and Wizardry")
-                .build();
-        School hogwartsSchoolOfWitchcraftAndWizardry
-                = School.builder().name("Hogwarts School of Witchcraft and Wizardry")
-                .build();
+        List<School> schools = new ArrayList<>();
 
-        schoolRepository.saveAll(Lists.newArrayList(beauxbatonsAcademyOfMagic, durmstrangInstitute,
-                hogwartsAcademyOfWitchcraftAndWizardry, hogwartsSchoolOfWitchcraftAndWizardry));
+        schools.add(School.builder().name("Beauxbatons Academy of Magic").build());
+        schools.add(School.builder().name("Durmstrang Institute").build());
+        schools.add(School.builder().name("Hogwarts Academy of Witchcraft and Wizardry").build());
+        schools.add(School.builder().name("Hogwarts School of Witchcraft and Wizardry").build());
+
+        schoolRepository.saveAll(schools);
     }
 
     private void initBloodStatusTable() {
-        BloodStatus unknown = BloodStatus.builder().name("unknown").build();
-        BloodStatus halfBlood = BloodStatus.builder().name("half-blood").build();
-        BloodStatus halfGiant = BloodStatus.builder().name("half-giant").build();
-        BloodStatus muggle = BloodStatus.builder().name("muggle").build();
-        BloodStatus muggleBorn = BloodStatus.builder().name("muggle-born").build();
-        BloodStatus pureBlood = BloodStatus.builder().name("pure-blood").build();
-        BloodStatus quarterVilla = BloodStatus.builder().name("quarter-villa").build();
-        BloodStatus squib = BloodStatus.builder().name("squib").build();
+        List<BloodStatus> bloodStatuses = new ArrayList<>();
 
-        bloodStatusRepository.saveAll(
-                Lists.newArrayList(unknown,
-                        halfBlood,
-                        halfGiant,
-                        muggle,
-                        muggleBorn,
-                        pureBlood,
-                        quarterVilla,
-                        squib));
+        bloodStatuses.add(BloodStatus.builder().name("unknown").build());
+        bloodStatuses.add(BloodStatus.builder().name("half-blood").build());
+        bloodStatuses.add(BloodStatus.builder().name("half-giant").build());
+        bloodStatuses.add(BloodStatus.builder().name("muggle").build());
+        bloodStatuses.add(BloodStatus.builder().name("muggle-born").build());
+        bloodStatuses.add(BloodStatus.builder().name("pure-blood").build());
+        bloodStatuses.add(BloodStatus.builder().name("quarter-villa").build());
+        bloodStatuses.add(BloodStatus.builder().name("squib").build());
+
+        bloodStatusRepository.saveAll(bloodStatuses);
     }
 
     private void initSpeciesTable() {
-        Species acromantula = Species.builder().name("acromantula").build();
-        Species Boarhound = Species.builder().name("Boarhound").build();
-        Species cat = Species.builder().name("cat").build();
-        Species centaur = Species.builder().name("centaur").build();
-        Species ghost = Species.builder().name("ghost").build();
-        Species giant = Species.builder().name("giant").build();
-        Species goblin = Species.builder().name("goblin").build();
-        Species greyOwl = Species.builder().name("Great Grey Owl").build();
-        Species halfGiant = Species.builder().name("half-giant").build();
-        Species hippogriff = Species.builder().name("hippogriff").build();
-        Species horcrux = Species.builder().name("horcrux").build();
-        Species houseElf = Species.builder().name("house-elf").build();
-        Species human = Species.builder().name("human").build();
-        Species humanMetamorphMagus = Species.builder().name("human (metamorphmagus)").build();
-        Species norwegianRidgeback = Species.builder().name("Norwegian RidgeBack").build();
-        Species partGoblin = Species.builder().name("part-goblin").build();
-        Species partHuman = Species.builder().name("part-human").build();
-        Species phoenix = Species.builder().name("phoenix").build();
-        Species poltergeist = Species.builder().name("poltergeist").build();
-        Species portrait = Species.builder().name("portrait").build();
-        Species scopsOwl = Species.builder().name("scops owl").build();
-        Species snowyOwl = Species.builder().name("Snowy Owl").build();
-        Species threeHeadedDog = Species.builder().name("three-headed dog").build();
-        Species toad = Species.builder().name("toad").build();
-        Species werewolf = Species.builder().name("werewolf").build();
+        List<Species> speciesList = new ArrayList<>();
 
-        speciesRepository.saveAll(Lists.newArrayList(acromantula,
-                Boarhound,
-                cat,
-                centaur,
-                ghost,
-                giant,
-                goblin,
-                greyOwl,
-                halfGiant,
-                hippogriff,
-                horcrux,
-                houseElf,
-                human,
-                humanMetamorphMagus,
-                norwegianRidgeback,
-                partGoblin,
-                partHuman,
-                phoenix,
-                poltergeist,
-                portrait,
-                scopsOwl,
-                snowyOwl,
-                threeHeadedDog,
-                toad,
-                werewolf));
+        speciesList.add(Species.builder().name("acromantula").build());
+        speciesList.add(Species.builder().name("Boarhound").build());
+        speciesList.add(Species.builder().name("cat").build());
+        speciesList.add(Species.builder().name("centaur").build());
+        speciesList.add(Species.builder().name("ghost").build());
+        speciesList.add(Species.builder().name("giant").build());
+        speciesList.add(Species.builder().name("goblin").build());
+        speciesList.add(Species.builder().name("Great Grey Owl").build());
+        speciesList.add(Species.builder().name("half-giant").build());
+        speciesList.add(Species.builder().name("hippogriff").build());
+        speciesList.add(Species.builder().name("horcrux").build());
+        speciesList.add(Species.builder().name("house-elf").build());
+        speciesList.add(Species.builder().name("human").build());
+        speciesList.add(Species.builder().name("human (metamorphmagus)").build());
+        speciesList.add(Species.builder().name("Norwegian Ridgeback").build());
+        speciesList.add(Species.builder().name("part-goblin").build());
+        speciesList.add(Species.builder().name("part-human").build());
+        speciesList.add(Species.builder().name("phoenix").build());
+        speciesList.add(Species.builder().name("poltergeist").build());
+        speciesList.add(Species.builder().name("portrait").build());
+        speciesList.add(Species.builder().name("scops owl").build());
+        speciesList.add(Species.builder().name("Snowy Owl").build());
+        speciesList.add(Species.builder().name("three-headed dog").build());
+        speciesList.add(Species.builder().name("toad").build());
+        speciesList.add(Species.builder().name("werewolf").build());
+
+        speciesRepository.saveAll(speciesList);
     }
 
     private void initAnimagusTable() {
-        Animagus beetle = Animagus.builder().name("beetle").build();
-        Animagus dog = Animagus.builder().name("black dog").build();
-        Animagus rat = Animagus.builder().name("rat").build();
-        Animagus stag = Animagus.builder().name("stag").build();
-        Animagus tabbyCat = Animagus.builder().name("tabby cat").build();
+        List<Animagus> animaguses = new ArrayList<>();
 
-        animagusRepository.saveAll(Lists.newArrayList(beetle, dog, rat, stag, tabbyCat));
+        animaguses.add(Animagus.builder().name("beetle").build());
+        animaguses.add(Animagus.builder().name("black dog").build());
+        animaguses.add(Animagus.builder().name("rat").build());
+        animaguses.add(Animagus.builder().name("stag").build());
+        animaguses.add(Animagus.builder().name("tabby cat").build());
+
+        animagusRepository.saveAll(animaguses);
     }
 
     private void initHouseTable() {
-        House gryffindor = House.builder().name("Gryffindor").build();
-        House hufflepuff = House.builder().name("Hufflepuff").build();
-        House ravenclaw = House.builder().name("Ravenclaw").build();
-        House slytherin = House.builder().name("Slytherin").build();
+        List<House> houses = new ArrayList<>();
 
-        houseRepository
-                .saveAll(Lists.newArrayList(gryffindor, hufflepuff, ravenclaw, slytherin));
+        houses.add(House.builder().name("Gryffindor").build());
+        houses.add(House.builder().name("Hufflepuff").build());
+        houses.add(House.builder().name("Ravenclaw").build());
+        houses.add(House.builder().name("Slytherin").build());
+
+        houseRepository.saveAll(houses);
     }
+
 }
 
