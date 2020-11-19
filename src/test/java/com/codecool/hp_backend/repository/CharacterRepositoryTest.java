@@ -3,7 +3,6 @@ package com.codecool.hp_backend.repository;
 import com.codecool.hp_backend.entity.Character;
 import com.codecool.hp_backend.entity.House;
 import com.codecool.hp_backend.entity.School;
-import net.bytebuddy.asm.Advice;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @ActiveProfiles("test")
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class CharacterRepositoryTest {
 
     @Autowired
@@ -227,12 +227,11 @@ class CharacterRepositoryTest {
                 .deathEater(false)
                 .build();
 
-        entityManager.clear();
         characterRepository.saveAll(Lists.newArrayList(character, character2, character3));
-
         Character returnedCharacter = characterRepository.getCharacterById(2L);
-        System.out.println(returnedCharacter.getId());
         assertEquals(2L, returnedCharacter.getId());
+//        Character returnedCharacter = characterRepository.getCharacterById(character2.getId());
+//        assertEquals(character2.getId(), returnedCharacter.getId());
     }
 
     @Test
