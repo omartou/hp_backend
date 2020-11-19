@@ -5,6 +5,7 @@ import com.codecool.hp_backend.entity.Character;
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,34 +13,48 @@ import java.util.List;
 
 @Service
 public class DBInitializer {
-
-    private final HouseRepository houseRepository;
-    private final BloodStatusRepository bloodStatusRepository;
-    private final AnimagusRepository animagusRepository;
-    private final SchoolRepository schoolRepository;
-    private final SpeciesRepository speciesRepository;
-    private final CharacterRepository characterRepository;
-    private final CharacterStorage characterStorage;
-    private final WandRepository wandRepository;
+    @Autowired
+    private HouseRepository houseRepository;
 
     @Autowired
-    public DBInitializer(HouseRepository houseRepository,
-                         BloodStatusRepository bloodStatusRepository,
-                         AnimagusRepository animagusRepository,
-                         SchoolRepository schoolRepository,
-                         SpeciesRepository speciesRepository,
-                         CharacterRepository characterRepository,
-                         CharacterStorage characterStorage,
-                         WandRepository wandRepository) {
-        this.houseRepository = houseRepository;
-        this.bloodStatusRepository = bloodStatusRepository;
-        this.animagusRepository = animagusRepository;
-        this.schoolRepository = schoolRepository;
-        this.speciesRepository = speciesRepository;
-        this.characterRepository = characterRepository;
-        this.characterStorage = characterStorage;
-        this.wandRepository = wandRepository;
-    }
+    private BloodStatusRepository bloodStatusRepository;
+
+    @Autowired
+    private AnimagusRepository animagusRepository;
+
+    @Autowired
+    private SchoolRepository schoolRepository;
+
+    @Autowired
+    private SpeciesRepository speciesRepository;
+
+    @Autowired
+    private CharacterRepository characterRepository;
+
+    @Autowired
+    private CharacterStorage characterStorage;
+
+    @Autowired
+    private WandRepository wandRepository;
+
+//    @Autowired
+//    public DBInitializer(HouseRepository houseRepository,
+//                         BloodStatusRepository bloodStatusRepository,
+//                         AnimagusRepository animagusRepository,
+//                         SchoolRepository schoolRepository,
+//                         SpeciesRepository speciesRepository,
+//                         CharacterRepository characterRepository,
+//                         CharacterStorage characterStorage,
+//                         WandRepository wandRepository) {
+//        this.houseRepository = houseRepository;
+//        this.bloodStatusRepository = bloodStatusRepository;
+//        this.animagusRepository = animagusRepository;
+//        this.schoolRepository = schoolRepository;
+//        this.speciesRepository = speciesRepository;
+//        this.characterRepository = characterRepository;
+//        this.characterStorage = characterStorage;
+//        this.wandRepository = wandRepository;
+//    }
 
     public void initDB() {
         initHouseTable();

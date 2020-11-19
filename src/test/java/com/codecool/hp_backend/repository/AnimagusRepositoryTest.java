@@ -13,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @RunWith(SpringRunner.class)
+//@ContextConfiguration(classes= OrderServiceConfig.class, loader= AnnotationConfigContextLoader.class)
 @DataJpaTest
 @ActiveProfiles("test")
 public class AnimagusRepositoryTest {
@@ -21,7 +22,7 @@ public class AnimagusRepositoryTest {
     private AnimagusRepository animagusRepository;
 
     @Test
-    public void findAnimagusByName() {
+    public void findAnimagusByNameReturnAnimagusEntity() {
         Animagus animagusOne = Animagus.builder()
                 .name("animagusOne")
                 .build();
@@ -36,7 +37,4 @@ public class AnimagusRepositoryTest {
         assertEquals(animagusTwo, returnedAnimagus);
     }
 
-    @Test
-    public void getAnimagusNameById() {
-    }
 }
