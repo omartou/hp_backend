@@ -8,6 +8,4 @@ import org.springframework.data.repository.query.Param;
 public interface AnimagusRepository extends JpaRepository<Animagus, Long> {
     Animagus findAnimagusByName(String animagus);
 
-    @Query("SELECT a.name FROM Animagus a WHERE a.id = :id")
-    String getAnimagusNameById(@Param("id") Long id);
 }
