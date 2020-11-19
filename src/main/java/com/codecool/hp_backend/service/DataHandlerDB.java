@@ -2,7 +2,6 @@ package com.codecool.hp_backend.service;
 
 import com.codecool.hp_backend.entity.Character;
 import com.codecool.hp_backend.entity.House;
-import com.codecool.hp_backend.entity.School;
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,74 +12,42 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-public class DBDataHandler implements DataHandler {
+public class DataHandlerDB implements DataHandler {
 
-    private HouseRepository houseRepository;
-
-    private BloodStatusRepository bloodStatusRepository;
-
-    private AnimagusRepository animagusRepository;
-
-    private SchoolRepository schoolRepository;
-
-    private SpeciesRepository speciesRepository;
+    private final HouseRepository houseRepository;
+    private final CharacterRepository characterRepository;
 
     @Autowired
-    private CharacterRepository characterRepository;
-
-
-    @Autowired
-    public DBDataHandler(HouseRepository houseRepository,
-                         BloodStatusRepository bloodStatusRepository,
-                         AnimagusRepository animagusRepository,
-                         SchoolRepository schoolRepository,
-                         SpeciesRepository speciesRepository,
+    public DataHandlerDB(HouseRepository houseRepository,
                          CharacterRepository characterRepository) {
-        //TODO: We should get data from DB and store them in 'characters' variable
         this.houseRepository = houseRepository;
-        this.bloodStatusRepository = bloodStatusRepository;
-        this.animagusRepository = animagusRepository;
-        this.schoolRepository = schoolRepository;
-        this.speciesRepository = speciesRepository;
         this.characterRepository = characterRepository;
-        this.characters = null;
-//        initHouseQuizCharacters();
-    }
-
-    private final List<PotterCharacter> characters;
-    private final List<PotterCharacter> houseQuizCharacters = new ArrayList<>();
-
-
-    private void initHouseQuizCharacters() {
-        for (PotterCharacter character : characters) {
-            if (character.getHouse() != null) {
-                houseQuizCharacters.add(character);
-            }
-        }
     }
 
     @Override
     public List<PotterCharacter> getHogwartsHouseCharacters(String house) {
         List<PotterCharacter> houseCharacters = new ArrayList<>();
         House houseByName = houseRepository.findHouseByName(house.substring(0, 1).toUpperCase() + house.substring(1));
-        List<Character> characters = characterRepository.getCharactersByHouse(houseByName);
+        List<Character> characters = characterRepository.getCharactersByHouseOrderByName(houseByName);
+
         for (Character character : characters) {
             PotterCharacter potterCharacter = convertCharacterToPotterCharacter(character);
             houseCharacters.add(potterCharacter);
-
         }
+        System.out.println(house + " : " + houseCharacters.size());
         return houseCharacters;
     }
 
     @Override
     public List<PotterCharacter> getHogwartsEmployees() {
         List<PotterCharacter> employees = new ArrayList<>();
-        List<Character> professors = characterRepository.getCharactersByRoleContaining("Professor");
+        List<Character> professors = characterRepository.getCharactersByRoleContainingOrderByName("Professor");
+
         for (Character professor : professors) {
             PotterCharacter potterCharacter = convertCharacterToPotterCharacter(professor);
             employees.add(potterCharacter);
         }
-
+        System.out.println("employees: " + employees.size());
         return employees;
     }
 
@@ -88,22 +55,26 @@ public class DBDataHandler implements DataHandler {
     public List<PotterCharacter> getOtherCharacters() {
         List<PotterCharacter> others = new ArrayList<>();
         List<Character> otherCharacters = characterRepository
-                .getCharactersByMinistryOfMagicsIsFalseAndSchoolIsNullOrSchoolNameNotContains("Hogwarts");
+                .getCharactersByMinistryOfMagicsIsFalseAndSchoolIsNullOrSchoolNameNotContainsOrderByName("Hogwarts");
+
         for (Character otherCharacter : otherCharacters) {
             PotterCharacter potterCharacter = convertCharacterToPotterCharacter(otherCharacter);
             others.add(potterCharacter);
         }
+        System.out.println("other: " + otherCharacters.size());
         return others;
     }
 
     @Override
     public List<PotterCharacter> getMinistryOfMagicCharacters() {
         List<PotterCharacter> ministryCharacters = new ArrayList<>();
-        List<Character> ministry = characterRepository.getCharactersByMinistryOfMagicsIsTrue();
+        List<Character> ministry = characterRepository.getCharactersByMinistryOfMagicsIsTrueOrderByName();
+
         for (Character character : ministry) {
             PotterCharacter potterCharacter = convertCharacterToPotterCharacter(character);
             ministryCharacters.add(potterCharacter);
         }
+        System.out.println("ministry: " + ministryCharacters.size());
         return ministryCharacters;
     }
 
@@ -115,31 +86,16 @@ public class DBDataHandler implements DataHandler {
 
     @Override
     public PotterCharacter getRandomHouseQuizCharacter() {
-        List<Character> houseCharacters = characterRepository.getCharactersByHouseIsNotNull();
+        List<Character> houseCharacters = characterRepository.getCharactersByHouseIsNotNullOrderByName();
         Random random = new Random();
-
+        System.out.println("houseQuizCharacters: " + houseCharacters.size());
         return convertCharacterToPotterCharacter(houseCharacters.get(random.nextInt(houseCharacters.size())));
     }
 
-
-
     private PotterCharacter convertCharacterToPotterCharacter(Character character) {
-            String animagus = null;
-            String house = null;
-            String school = null;
-            String species = null;
-            if (character.getAnimagus() != null) {
-                animagus = character.getAnimagus().getName();
-            }
-            if (character.getHouse() != null) {
-                house = character.getHouse().getName();
-            }
-            if (character.getSchool() != null) {
-                school = character.getSchool().getName();
-            }
-            if (character.getSpecies() != null) {
-                species = character.getSpecies().getName();
-            }
+            String animagus = character.getAnimagus() != null ? character.getAnimagus().getName() : null;
+            String house = character.getHouse() != null ? character.getHouse().getName() : null;
+            String school = character.getSchool() != null ? character.getSchool().getName() : null;
 
         return PotterCharacter.builder()
                 .id(character.getId().toString())
@@ -152,7 +108,7 @@ public class DBDataHandler implements DataHandler {
                 .dumbledoresArmy(character.isDumbledoresArmy())
                 .bloodStatus(character.getBloodStatus().getName())
                 .deathEater(character.isDeathEater())
-                .species(species)
+                .species(character.getSpecies().getName())
                 .boggart(character.getBoggart())
                 .alias(character.getAlias())
                 .wand(character.getWand())
@@ -160,4 +116,5 @@ public class DBDataHandler implements DataHandler {
                 .animagus(animagus)
                 .build();
     }
+
 }
