@@ -2,10 +2,7 @@ package com.codecool.hp_backend.entity;
 
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -23,9 +20,11 @@ public class Character {
 
     private String role;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     private House house;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     private School school;
 
@@ -38,12 +37,14 @@ public class Character {
     @Column(nullable = false)
     private boolean dumbledoresArmy;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     private BloodStatus bloodStatus;
 
     @Column(nullable = false)
     private boolean deathEater;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     private Species species;
 
@@ -51,11 +52,13 @@ public class Character {
 
     private String alias;
 
+    @EqualsAndHashCode.Exclude
     @OneToOne
     private Wand wand;
 
     private String patronus;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     private Animagus animagus;
 

@@ -24,5 +24,6 @@ public class BloodStatus {
     @OneToMany(mappedBy = "bloodStatus", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JsonIgnore
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Character> character;
 }

@@ -25,6 +25,7 @@ public class Wand {
     @OneToOne(mappedBy = "wand", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JsonIgnore
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Character owner;
 
 

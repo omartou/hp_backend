@@ -24,6 +24,7 @@ public class House {
     @OneToMany(mappedBy = "house", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JsonIgnore
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Character> character;
 
 }
