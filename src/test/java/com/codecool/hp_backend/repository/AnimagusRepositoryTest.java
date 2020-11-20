@@ -2,21 +2,19 @@ package com.codecool.hp_backend.repository;
 
 import com.codecool.hp_backend.entity.Animagus;
 import org.assertj.core.util.Lists;
-
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @RunWith(SpringRunner.class)
-//@ContextConfiguration(classes= OrderServiceConfig.class, loader= AnnotationConfigContextLoader.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class AnimagusRepositoryTest {
+class AnimagusRepositoryTest {
 
     @Autowired
     private AnimagusRepository animagusRepository;

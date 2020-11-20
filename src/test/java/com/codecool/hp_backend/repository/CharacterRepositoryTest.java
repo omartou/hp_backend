@@ -3,14 +3,10 @@ package com.codecool.hp_backend.repository;
 import com.codecool.hp_backend.entity.Character;
 import com.codecool.hp_backend.entity.House;
 import com.codecool.hp_backend.entity.School;
-import net.bytebuddy.asm.Advice;
 import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -36,7 +32,6 @@ class CharacterRepositoryTest {
 
     @Autowired
     private SchoolRepository schoolRepository;
-
 
     @Test
     void getCharactersByHouseOrderByName() {
