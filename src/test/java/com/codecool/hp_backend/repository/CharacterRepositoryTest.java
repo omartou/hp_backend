@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class CharacterRepositoryTest {
 
     @Autowired
@@ -106,7 +109,8 @@ class CharacterRepositoryTest {
 
         characterRepository.saveAll(Lists.newArrayList(character, character2, character3));
 
-        List<Character> professors = characterRepository.getCharactersByRoleContainingOrderByName("Professor");
+        List<Character> professors = characterRepository
+                .getCharactersByRoleContainingOrderByName("Professor");
         assertThat(professors)
                 .hasSize(2)
                 .containsExactly(character2, character);
@@ -139,7 +143,8 @@ class CharacterRepositoryTest {
                 .build();
 
         characterRepository.saveAll(Lists.newArrayList(character, character2, character3));
-        List<Character> isMinistryOfMagic = characterRepository.getCharactersByMinistryOfMagicsIsTrueOrderByName();
+        List<Character> isMinistryOfMagic = characterRepository
+                .getCharactersByMinistryOfMagicsIsTrueOrderByName();
 
         assertThat(isMinistryOfMagic)
                 .hasSize(2)
@@ -192,9 +197,12 @@ class CharacterRepositoryTest {
                 .build();
 
         schoolRepository.saveAll(Lists.newArrayList(school, school2));
-        characterRepository.saveAll(Lists.newArrayList(character, character2, character3, character4));
+        characterRepository
+                .saveAll(Lists.newArrayList(character, character2, character3, character4));
 
-        List<Character> characterList = characterRepository.getCharactersByMinistryOfMagicsIsFalseAndSchoolIsNullOrSchoolNameNotContainsOrderByName("Codecool");
+        List<Character> characterList = characterRepository
+                .getCharactersByMinistryOfMagicsIsFalseAndSchoolIsNullOrSchoolNameNotContainsOrderByName(
+                        "Codecool");
 
         assertThat(characterList)
                 .hasSize(2)
@@ -228,6 +236,8 @@ class CharacterRepositoryTest {
                 .build();
 
         characterRepository.saveAll(Lists.newArrayList(character, character2, character3));
+
+        System.out.println(character2.getId());
 
         Character returnedCharacter = characterRepository.getCharacterById(2L);
         System.out.println(returnedCharacter.getId());
@@ -273,18 +283,13 @@ class CharacterRepositoryTest {
         houseRepository.saveAll(Lists.newArrayList(house1, house2));
         characterRepository.saveAll(Lists.newArrayList(character, character2, character2));
 
-        List<Character> characterList = characterRepository.getCharactersByHouseIsNotNullOrderByName();
+        List<Character> characterList = characterRepository
+                .getCharactersByHouseIsNotNullOrderByName();
 
         assertThat(characterList)
                 .hasSize(2)
                 .containsExactly(character2, character);
     }
 
-
-    @BeforeEach
-    private void flushBeforeEach() {
-        characterRepository.deleteAll();
-        houseRepository.deleteAll();
-    }
 }
 

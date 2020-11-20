@@ -24,6 +24,7 @@ public class Animagus {
     @OneToMany(mappedBy = "animagus", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JsonIgnore
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Character> character;
 
 }
