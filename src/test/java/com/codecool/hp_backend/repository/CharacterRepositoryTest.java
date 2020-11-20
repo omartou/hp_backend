@@ -5,11 +5,13 @@ import com.codecool.hp_backend.entity.House;
 import com.codecool.hp_backend.entity.School;
 import net.bytebuddy.asm.Advice;
 import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +21,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest
 @ActiveProfiles("test")
 class CharacterRepositoryTest {
 
@@ -32,8 +34,6 @@ class CharacterRepositoryTest {
     @Autowired
     private SchoolRepository schoolRepository;
 
-    @Autowired
-    private TestEntityManager entityManager;
 
     @Test
     void getCharactersByHouseOrderByName() {
@@ -227,7 +227,6 @@ class CharacterRepositoryTest {
                 .deathEater(false)
                 .build();
 
-        entityManager.clear();
         characterRepository.saveAll(Lists.newArrayList(character, character2, character3));
 
         Character returnedCharacter = characterRepository.getCharacterById(2L);
@@ -280,4 +279,12 @@ class CharacterRepositoryTest {
                 .hasSize(2)
                 .containsExactly(character2, character);
     }
+
+
+    @BeforeEach
+    private void flushBeforeEach() {
+        characterRepository.deleteAll();
+        houseRepository.deleteAll();
+    }
 }
+
