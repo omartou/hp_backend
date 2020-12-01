@@ -6,6 +6,8 @@ import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.repository.*;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,6 +42,9 @@ public class DBInitializer {
 
     @Autowired
     private HPUserRepository hpUserRepository;
+
+    private final PasswordEncoder passwordEncoder = PasswordEncoderFactories
+            .createDelegatingPasswordEncoder();
 
     public void initDB() {
         initHouseTable();
@@ -184,10 +189,11 @@ public class DBInitializer {
     private void initUserTable() {
         List<HPUser> hpUsers = new ArrayList<>();
 
-        hpUsers.add(HPUser.builder().username("admin").password("admin")
+        hpUsers.add(HPUser.builder().username("admin").password(passwordEncoder.encode("admin"))
                 .roles(Arrays.asList("ROLE_USER", "ROLE_ADMIN")).email("admin@admin.com").build());
         hpUsers.add(
-                HPUser.builder().username("user").password("user").email("user@user.com").build());
+                HPUser.builder().username("user").password(passwordEncoder.encode("user"))
+                        .email("user@user.com").build());
 
         hpUserRepository.saveAll(hpUsers);
     }
