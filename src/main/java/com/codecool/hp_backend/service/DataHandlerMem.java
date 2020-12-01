@@ -100,5 +100,10 @@ public class DataHandlerMem implements DataHandler {
         return false;
     }
 
+    @Override
+    public HPUser getHpUserByName(String name) {
+        return null;
+    }
+
 
 }

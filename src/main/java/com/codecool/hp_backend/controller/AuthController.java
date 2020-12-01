@@ -37,9 +37,21 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(HPUser hpUser) {
+    public ResponseEntity<?> login(@RequestBody HPUser hpUser) {
         System.out.println("username: " + hpUser.getUsername() + "; password: " + hpUser.getPassword());
-        return ResponseEntity.ok("You are logged in!");
+        String userName = hpUser.getUsername();
+        String password = hpUser.getPassword();
+
+        if (!dataHandler.checkIfUsernameExists(userName)) {
+            return ResponseEntity.ok("Invalid username of password!");
+        }
+
+        HPUser registeredUser = dataHandler.getHpUserByName(userName);
+        if (registeredUser.getUsername().equals(userName) && registeredUser.getPassword().equals(password)) {
+            return ResponseEntity.ok("Login successful!");
+        }
+
+        return ResponseEntity.ok("Invalid username of password!");
     }
 
 }

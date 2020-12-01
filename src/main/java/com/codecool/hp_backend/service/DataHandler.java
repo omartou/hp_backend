@@ -24,4 +24,6 @@ public interface DataHandler {
     boolean checkIfUsernameExists(String username);
 
     boolean checkIfEmailExists(String email);
+
+    public HPUser getHpUserByName(String name);
 }

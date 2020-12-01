@@ -135,6 +135,10 @@ public class DataHandlerDB implements DataHandler {
         return hpUserRepository.existsHPUserByEmail(email);
     }
 
+    @Override
+    public HPUser getHpUserByName(String name) {
+        return hpUserRepository.getHPUserByUsername(name);
+    }
 
 
 }

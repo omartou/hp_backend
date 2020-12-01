@@ -8,4 +8,6 @@ public interface HPUserRepository extends JpaRepository<HPUser, Long> {
     boolean existsHPUserByUsername(String username);
 
     boolean existsHPUserByEmail(String email);
+
+    HPUser getHPUserByUsername(String name);
 }
