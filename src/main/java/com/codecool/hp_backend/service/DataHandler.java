@@ -1,5 +1,6 @@
 package com.codecool.hp_backend.service;
 
+import com.codecool.hp_backend.entity.HPUser;
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 
 import java.util.List;
@@ -17,4 +18,10 @@ public interface DataHandler {
     PotterCharacter getCharacterById(String id);
 
     PotterCharacter getRandomHouseQuizCharacter();
+
+    void saveUser(HPUser hpuser);
+
+    boolean checkIfUsernameExists(String username);
+
+    boolean checkIfEmailExists(String email);
 }

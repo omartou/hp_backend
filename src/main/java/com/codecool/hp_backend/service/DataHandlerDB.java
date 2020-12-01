@@ -1,6 +1,7 @@
 package com.codecool.hp_backend.service;
 
 import com.codecool.hp_backend.entity.Character;
+import com.codecool.hp_backend.entity.HPUser;
 import com.codecool.hp_backend.entity.House;
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.repository.*;
@@ -16,12 +17,14 @@ public class DataHandlerDB implements DataHandler {
 
     private final HouseRepository houseRepository;
     private final CharacterRepository characterRepository;
+    private final HPUserRepository hpUserRepository;
 
     @Autowired
     public DataHandlerDB(HouseRepository houseRepository,
-                         CharacterRepository characterRepository) {
+                         CharacterRepository characterRepository, HPUserRepository hpUserRepository) {
         this.houseRepository = houseRepository;
         this.characterRepository = characterRepository;
+        this.hpUserRepository = hpUserRepository;
     }
 
     @Override
@@ -93,10 +96,10 @@ public class DataHandlerDB implements DataHandler {
     }
 
     private PotterCharacter convertCharacterToPotterCharacter(Character character) {
-            String animagus = character.getAnimagus() != null ? character.getAnimagus().getName() : null;
-            String house = character.getHouse() != null ? character.getHouse().getName() : null;
-            String school = character.getSchool() != null ? character.getSchool().getName() : null;
-            String wand = character.getWand() != null ? character.getWand().toString() : null;
+        String animagus = character.getAnimagus() != null ? character.getAnimagus().getName() : null;
+        String house = character.getHouse() != null ? character.getHouse().getName() : null;
+        String school = character.getSchool() != null ? character.getSchool().getName() : null;
+        String wand = character.getWand() != null ? character.getWand().toString() : null;
 
         return PotterCharacter.builder()
                 .id(character.getId().toString())
@@ -117,5 +120,21 @@ public class DataHandlerDB implements DataHandler {
                 .animagus(animagus)
                 .build();
     }
+
+    @Override
+    public void saveUser(HPUser hpUser) {
+        hpUserRepository.save(hpUser);
+    }
+    @Override
+    public boolean checkIfUsernameExists(String username) {
+        return hpUserRepository.existsHPUserByUsername(username);
+    }
+
+    @Override
+    public boolean checkIfEmailExists(String email) {
+        return hpUserRepository.existsHPUserByEmail(email);
+    }
+
+
 
 }

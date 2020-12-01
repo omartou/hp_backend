@@ -1,5 +1,6 @@
 package com.codecool.hp_backend.service;
 
+import com.codecool.hp_backend.entity.HPUser;
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,5 +86,19 @@ public class DataHandlerMem implements DataHandler {
         Random random = new Random();
         return houseQuizCharacters.get(random.nextInt(houseQuizCharacters.size()));
     }
+
+    @Override
+    public void saveUser(HPUser hpUser){}
+
+    @Override
+    public boolean checkIfUsernameExists(String username) {
+        return false;
+    }
+
+    @Override
+    public boolean checkIfEmailExists(String email) {
+        return false;
+    }
+
 
 }
