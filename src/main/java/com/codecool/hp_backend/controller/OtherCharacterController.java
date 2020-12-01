@@ -4,12 +4,14 @@ import com.codecool.hp_backend.service.DataHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.net.http.HttpResponse;
+import java.util.Arrays;
 
 @RestController
 @CrossOrigin
@@ -23,7 +25,8 @@ public class OtherCharacterController {
     }
 
     @GetMapping("/other")
-    public ResponseEntity<Object> getOtherCharacters() {
+    public ResponseEntity<Object> getOtherCharacters(@CookieValue(value = "token") String token) {
+        System.out.println(token);
         return ResponseEntity.ok(dataHandler.getOtherCharacters());
     }
 
