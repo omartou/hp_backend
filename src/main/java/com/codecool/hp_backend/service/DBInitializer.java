@@ -4,8 +4,10 @@ import com.codecool.hp_backend.entity.*;
 import com.codecool.hp_backend.entity.Character;
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.repository.*;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @Service
 public class DBInitializer {
+
     @Autowired
     private HouseRepository houseRepository;
 
@@ -37,24 +40,11 @@ public class DBInitializer {
     @Autowired
     private WandRepository wandRepository;
 
-//    @Autowired
-//    public DBInitializer(HouseRepository houseRepository,
-//                         BloodStatusRepository bloodStatusRepository,
-//                         AnimagusRepository animagusRepository,
-//                         SchoolRepository schoolRepository,
-//                         SpeciesRepository speciesRepository,
-//                         CharacterRepository characterRepository,
-//                         CharacterStorage characterStorage,
-//                         WandRepository wandRepository) {
-//        this.houseRepository = houseRepository;
-//        this.bloodStatusRepository = bloodStatusRepository;
-//        this.animagusRepository = animagusRepository;
-//        this.schoolRepository = schoolRepository;
-//        this.speciesRepository = speciesRepository;
-//        this.characterRepository = characterRepository;
-//        this.characterStorage = characterStorage;
-//        this.wandRepository = wandRepository;
-//    }
+    @Autowired
+    private HPUserRepository hpUserRepository;
+
+    private final PasswordEncoder passwordEncoder = PasswordEncoderFactories
+            .createDelegatingPasswordEncoder();
 
     public void initDB() {
         initHouseTable();
@@ -63,6 +53,7 @@ public class DBInitializer {
         initAnimagusTable();
         initSchoolTable();
         initCharacterTable(characterStorage.getCharacterList());
+        initUserTable();
     }
 
     private void initCharacterTable(List<PotterCharacter> characters) {
@@ -71,11 +62,12 @@ public class DBInitializer {
         for (PotterCharacter character : characters) {
             House house = houseRepository.findHouseByName(character.getHouse());
             School school = schoolRepository.findSchoolByName(character.getSchool());
-            BloodStatus bloodStatus = bloodStatusRepository.findBloodStatusByName(character.getBloodStatus());
+            BloodStatus bloodStatus = bloodStatusRepository
+                    .findBloodStatusByName(character.getBloodStatus());
             Species species = speciesRepository.findSpeciesByName(character.getSpecies());
             Animagus animagus = animagusRepository.findAnimagusByName(character.getAnimagus());
             Wand wand = null;
-            if(character.getWand() != null) {
+            if (character.getWand() != null) {
                 String[] wandParts = character.getWand().split(", ");
                 wand = Wand.builder()
                         .wood(wandParts[0])
@@ -83,7 +75,6 @@ public class DBInitializer {
                         .core(Core.getEnumByString(wandParts[2]))
                         .build();
             }
-
 
             Character entity = Character.builder()
                     .name(character.getName())
@@ -193,6 +184,18 @@ public class DBInitializer {
         houses.add(House.builder().name("Slytherin").build());
 
         houseRepository.saveAll(houses);
+    }
+
+    private void initUserTable() {
+        List<HPUser> hpUsers = new ArrayList<>();
+
+        hpUsers.add(HPUser.builder().username("admin").password(passwordEncoder.encode("admin"))
+                .roles(Arrays.asList("ROLE_USER", "ROLE_ADMIN")).email("admin@admin.com").build());
+        hpUsers.add(
+                HPUser.builder().username("user").password(passwordEncoder.encode("user"))
+                        .email("user@user.com").build());
+
+        hpUserRepository.saveAll(hpUsers);
     }
 
 }
