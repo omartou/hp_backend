@@ -20,10 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -62,6 +61,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody HPUser hpUser, HttpServletResponse response) {
+        Map<Object, Object> model = new HashMap<>();
         try {
             System.out.println("username: " + hpUser.getUsername() + "; password: " + hpUser.getPassword());
             String userName = hpUser.getUsername();
@@ -73,32 +73,19 @@ public class AuthController {
                     .collect(Collectors.toList());
 
             String token = jwtTokenServices.createToken(userName, roles);
-
             System.out.println(token);
 
-            Cookie tokenCookie = new Cookie("token", token);
-//            tokenCookie.setHttpOnly(true);
-//            tokenCookie.setSecure(true);
-            tokenCookie.setPath("/");
+            model.put("status", "Login successful!");
+            model.put("username", userName);
+            model.put("roles", roles);
+            model.put("token", token);
 
-            response.addCookie(tokenCookie);
-
-            return ResponseEntity.ok("Login successful!");
+            return ResponseEntity.ok(model);
 
         } catch (AuthenticationException e) {
-            return ResponseEntity.ok("Invalid username or password!");
+            model.put("status", "Invalid username or password!");
+            return ResponseEntity.ok(model);
         }
-        /*
-        if (!dataHandler.checkIfUsernameExists(userName)) {
-            return ResponseEntity.ok("Invalid username of password!");
-        }
-
-        HPUser registeredUser = dataHandler.getHpUserByName(userName);
-        if (registeredUser.getUsername().equals(userName) && registeredUser.getPassword().equals(password)) {
-            return ResponseEntity.ok("Login successful!");
-        }
-
-        return ResponseEntity.ok("Invalid username of password!"); */
     }
 
 }
