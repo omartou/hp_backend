@@ -32,7 +32,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .anyRequest().permitAll()
+                .antMatchers(HttpMethod.POST, "/register").permitAll()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/character/**").authenticated()
+                .antMatchers(HttpMethod.PUT, "/character/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/hogwarts/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/ministry").permitAll()
+                .antMatchers(HttpMethod.GET, "/other").permitAll()
+                .antMatchers(HttpMethod.GET, "/quiz/**").permitAll()
+                .anyRequest().denyAll()
                 .and()
                 .addFilterBefore(new JwtTokenFilter(jwtTokenServices),
                         UsernamePasswordAuthenticationFilter.class);
