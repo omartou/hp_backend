@@ -37,8 +37,8 @@ public class AuthController {
 
     @Autowired
     public AuthController(@Qualifier("dataHandlerDB") DataHandler dataHandler,
-                          AuthenticationManager authenticationManager,
-                          JwtTokenServices jwtTokenServices) {
+            AuthenticationManager authenticationManager,
+            JwtTokenServices jwtTokenServices) {
         this.dataHandler = dataHandler;
         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         this.authenticationManager = authenticationManager;
@@ -47,26 +47,34 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody HPUser hpUser) {
+        Map<Object, Object> model = new HashMap<>();
+
         System.out.println(hpUser);
-        System.out.println("username: " + hpUser.getUsername() + "; password: " + hpUser.getPassword());
-        if(dataHandler.checkIfUsernameExists(hpUser.getUsername())){
-            return ResponseEntity.ok("Username already in use!");
-        }else if(dataHandler.checkIfEmailExists(hpUser.getEmail())){
-            return ResponseEntity.ok("Email already in use!");
+        System.out.println(
+                "username: " + hpUser.getUsername() + "; password: " + hpUser.getPassword());
+        if (dataHandler.checkIfUsernameExists(hpUser.getUsername())) {
+            model.put("status", "Username already in use!");
+            return ResponseEntity.ok(model);
+        } else if (dataHandler.checkIfEmailExists(hpUser.getEmail())) {
+            model.put("status", "Email already in use!");
+            return ResponseEntity.ok(model);
         }
         hpUser.setPassword(passwordEncoder.encode(hpUser.getPassword()));
         dataHandler.saveUser(hpUser);
-        return ResponseEntity.ok("Registration successful!");
+        model.put("status", "Registration successful!");
+        return ResponseEntity.ok(model);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody HPUser hpUser, HttpServletResponse response) {
         Map<Object, Object> model = new HashMap<>();
         try {
-            System.out.println("username: " + hpUser.getUsername() + "; password: " + hpUser.getPassword());
+            System.out.println(
+                    "username: " + hpUser.getUsername() + "; password: " + hpUser.getPassword());
             String userName = hpUser.getUsername();
             String password = hpUser.getPassword();
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password));
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(userName, password));
             List<String> roles = authentication.getAuthorities()
                     .stream()
                     .map(GrantedAuthority::getAuthority)
@@ -87,5 +95,4 @@ public class AuthController {
             return ResponseEntity.ok(model);
         }
     }
-
 }
