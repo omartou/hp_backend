@@ -42,6 +42,7 @@ public class OtherCharacterController {
     @PutMapping("/character/{id}")
     public ResponseEntity<?> updateCharacterById(@PathVariable("id") Long id,
                                                  @RequestBody PotterCharacter character) {
+        System.out.println(character.getAlias());
         dataHandler.updateCharacterById(id, character);
         return ResponseEntity.ok("Character [" +  character.getName() + "] updated successfully");
     }
