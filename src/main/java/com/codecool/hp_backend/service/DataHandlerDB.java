@@ -166,7 +166,7 @@ public class DataHandlerDB implements DataHandler {
         Animagus animagus = animagusRepository.findAnimagusByName(character.getAnimagus());
 
         Wand wand = null;
-        if (character.getWand() != null) {
+        if (!character.getWand().equals(", , ")) {
             String[] wandParts = character.getWand().split(", ");
             Wand wandFromDB = wandRepository.getWandByParams(wandParts[0], wandParts[1], Core.getEnumByString(wandParts[2]));
 //            System.out.println("wood: " + wandParts[0] + " | length: " + wandParts[1] + " | Core: " + Core.getEnumByString(wandParts[2]));
