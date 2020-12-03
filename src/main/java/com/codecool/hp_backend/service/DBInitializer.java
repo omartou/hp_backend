@@ -60,6 +60,7 @@ public class DBInitializer {
         List<Character> characterEntities = new ArrayList<>();
 
         for (PotterCharacter character : characters) {
+//            System.out.println("isUser:" + character.isUser());
             House house = houseRepository.findHouseByName(character.getHouse());
             School school = schoolRepository.findSchoolByName(character.getSchool());
             BloodStatus bloodStatus = bloodStatusRepository
@@ -77,6 +78,7 @@ public class DBInitializer {
             }
 
             Character entity = Character.builder()
+                    .user(false)
                     .name(character.getName())
                     .role(character.getRole())
                     .house(house)
