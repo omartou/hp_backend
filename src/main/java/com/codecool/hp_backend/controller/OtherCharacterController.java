@@ -45,6 +45,14 @@ public class OtherCharacterController {
         dataHandler.updateCharacterById(id, character);
         return ResponseEntity.ok("Character [" +  character.getName() + "] updated successfully");
     }
+
+//    @PutMapping("/character/{id}")
+//    public ResponseEntity<?> updateCharacterById(@PathVariable("id") String id,
+//                                                 @RequestBody PotterCharacter character) {
+//        dataHandler.updateCharacterById(Long.parseLong(id), character);
+//        return ResponseEntity.ok("Character [" +  character.getName() + "] updated successfully");
+//    }
+
 }
 
 
