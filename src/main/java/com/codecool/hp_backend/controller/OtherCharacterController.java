@@ -1,5 +1,6 @@
 package com.codecool.hp_backend.controller;
 
+import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.service.DataHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,21 @@ public class OtherCharacterController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/character/{id}")
+    public ResponseEntity<?> updateCharacterById(@PathVariable("id") Long id,
+                                                 @RequestBody PotterCharacter character) {
+        dataHandler.updateCharacterById(id, character);
+        return ResponseEntity.ok("Character [" +  character.getName() + "] updated successfully");
+    }
+
+//    @PutMapping("/character/{id}")
+//    public ResponseEntity<?> updateCharacterById(@PathVariable("id") String id,
+//                                                 @RequestBody PotterCharacter character) {
+//        dataHandler.updateCharacterById(Long.parseLong(id), character);
+//        return ResponseEntity.ok("Character [" +  character.getName() + "] updated successfully");
+//    }
+
 }
 
 

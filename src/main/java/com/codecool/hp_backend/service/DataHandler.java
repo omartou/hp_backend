@@ -26,4 +26,6 @@ public interface DataHandler {
     boolean checkIfEmailExists(String email);
 
     public HPUser getHpUserByName(String name);
+
+    void updateCharacterById(Long id, PotterCharacter character);
 }

@@ -105,5 +105,7 @@ public class DataHandlerMem implements DataHandler {
         return null;
     }
 
+    @Override
+    public void updateCharacterById(Long id, PotterCharacter character) {}
 
 }

@@ -1,8 +1,7 @@
 package com.codecool.hp_backend.service;
 
+import com.codecool.hp_backend.entity.*;
 import com.codecool.hp_backend.entity.Character;
-import com.codecool.hp_backend.entity.HPUser;
-import com.codecool.hp_backend.entity.House;
 import com.codecool.hp_backend.model.generated.PotterCharacter;
 import com.codecool.hp_backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +16,29 @@ public class DataHandlerDB implements DataHandler {
 
     private final HouseRepository houseRepository;
     private final CharacterRepository characterRepository;
+    private final SchoolRepository schoolRepository;
+    private final BloodStatusRepository bloodStatusRepository;
+    private final SpeciesRepository speciesRepository;
+    private final WandRepository wandRepository;
+    private final AnimagusRepository animagusRepository;
     private final HPUserRepository hpUserRepository;
 
     @Autowired
     public DataHandlerDB(HouseRepository houseRepository,
-                         CharacterRepository characterRepository, HPUserRepository hpUserRepository) {
+                         CharacterRepository characterRepository,
+                         SchoolRepository schoolRepository,
+                         BloodStatusRepository bloodStatusRepository,
+                         SpeciesRepository speciesRepository,
+                         WandRepository wandRepository,
+                         AnimagusRepository animagusRepository,
+                         HPUserRepository hpUserRepository) {
         this.houseRepository = houseRepository;
         this.characterRepository = characterRepository;
+        this.schoolRepository = schoolRepository;
+        this.bloodStatusRepository = bloodStatusRepository;
+        this.speciesRepository = speciesRepository;
+        this.wandRepository = wandRepository;
+        this.animagusRepository = animagusRepository;
         this.hpUserRepository = hpUserRepository;
     }
 
@@ -141,5 +156,51 @@ public class DataHandlerDB implements DataHandler {
         return hpUserRepository.getHPUserByUsername(name);
     }
 
+    @Override
+    public void updateCharacterById(Long id, PotterCharacter character) {
+        House house = houseRepository.findHouseByName(character.getHouse());
+        School school = schoolRepository.findSchoolByName(character.getSchool());
+        BloodStatus bloodStatus = bloodStatusRepository
+                .findBloodStatusByName(character.getBloodStatus());
+        Species species = speciesRepository.findSpeciesByName(character.getSpecies());
+        Animagus animagus = animagusRepository.findAnimagusByName(character.getAnimagus());
+
+        Wand wand = null;
+        if (!character.getWand().equals(", , ")) {
+            String[] wandParts = character.getWand().split(", ");
+            Wand wandFromDB = wandRepository.getWandByParams(wandParts[0], wandParts[1], Core.getEnumByString(wandParts[2]));
+//            System.out.println("wood: " + wandParts[0] + " | length: " + wandParts[1] + " | Core: " + Core.getEnumByString(wandParts[2]));
+//            System.out.println("wandFromDB: " + wandFromDB);
+            if (wandFromDB != null) {
+                wand = wandFromDB;
+            } else {
+                wand = Wand.builder()
+                        .wood(wandParts[0])
+                        .length(wandParts[1])
+                        .core(Core.getEnumByString(wandParts[2]))
+                        .build();
+                wand.setOwner(characterRepository.getCharacterById(id));
+                wandRepository.save(wand);
+            }
+        }
+
+        characterRepository.updateCharacterById(id,
+                character.isUser(),
+                character.getName(),
+                character.getRole(),
+                house,
+                school,
+                character.isMinistryOfMagic(),
+                character.isOrderOfThePhoenix(),
+                character.isDumbledoresArmy(),
+                bloodStatus,
+                character.isDeathEater(),
+                species,
+                character.getBoggart(),
+                character.getAlias(),
+                wand,
+                character.getPatronus(),
+                animagus);
+    }
 
 }
