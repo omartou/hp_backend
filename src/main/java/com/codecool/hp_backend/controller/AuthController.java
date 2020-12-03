@@ -3,7 +3,6 @@ package com.codecool.hp_backend.controller;
 import com.codecool.hp_backend.entity.HPUser;
 import com.codecool.hp_backend.security.JwtTokenServices;
 import com.codecool.hp_backend.service.DataHandler;
-import com.codecool.hp_backend.service.DataHandlerDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,14 +46,18 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody HPUser hpUser) {
         System.out.println(hpUser);
         System.out.println("username: " + hpUser.getUsername() + "; password: " + hpUser.getPassword());
+        Map<Object, Object> model = new HashMap<>();
         if(dataHandler.checkIfUsernameExists(hpUser.getUsername())){
-            return ResponseEntity.ok("Username already in use!");
+            model.put("status", "Username already in use!");
+            return ResponseEntity.ok(model);
         }else if(dataHandler.checkIfEmailExists(hpUser.getEmail())){
-            return ResponseEntity.ok("Email already in use!");
+            model.put("status", "Email already in use!");
+            return ResponseEntity.ok(model);
         }
         hpUser.setPassword(passwordEncoder.encode(hpUser.getPassword()));
         dataHandler.saveUser(hpUser);
-        return ResponseEntity.ok("Registration successful!");
+        model.put("status", "Registration successful!");
+        return ResponseEntity.ok(model);
     }
 
     @PostMapping("/login")
