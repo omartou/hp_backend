@@ -103,6 +103,7 @@ public class DataHandlerDB implements DataHandler {
 
         return PotterCharacter.builder()
                 .id(character.getId().toString())
+                .user(character.isUser())
                 .name(character.getName())
                 .role(character.getRole())
                 .house(house)

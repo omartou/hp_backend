@@ -15,6 +15,10 @@ public class Character {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean user = true;
+
     @Column(nullable = false, unique = true)
     private String name;
 

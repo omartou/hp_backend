@@ -44,6 +44,9 @@ public class PotterCharacter {
     @JsonProperty("_id")
     private String id;
 
+    @JsonProperty("user")
+    private boolean user;
+
     @JsonProperty("name")
     private String name;
 
