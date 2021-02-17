@@ -73,7 +73,7 @@ add-ons/plugins for the acknowledgements section. Here are a few examples.
 ## Getting Started
 
 This is an example of how you may give instructions on setting up your project locally. To get a
-local copy up and running follow these simple example steps.
+local copy up and running follow these simple example steps. For the full project you need to clone the omartou/hp_frontend repository too.
 
 ### Prerequisites
 
